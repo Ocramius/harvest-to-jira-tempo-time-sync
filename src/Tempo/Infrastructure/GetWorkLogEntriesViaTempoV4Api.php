@@ -13,7 +13,9 @@ use Psl;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 
+use function array_filter;
 use function array_map;
+use function array_values;
 use function implode;
 
 /** @link https://apidocs.tempo.io/v4/#section/API-conventions */
@@ -90,7 +92,7 @@ final class GetWorkLogEntriesViaTempoV4Api implements GetWorkLogEntries
                 ]),
             )['results'],
         );
-        
+
         return array_values(array_filter(
             $logEntries,
             static fn (LogEntry $logEntry): bool => $logEntry->matchesTimeEntry($timeEntry),

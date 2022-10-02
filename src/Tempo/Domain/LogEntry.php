@@ -76,4 +76,10 @@ final class LogEntry
         return $entry->spent_date->equals($this->date)
             && Psl\Regex\matches($this->description, '#harvest:' . preg_quote($entry->id, '#') . '$#');
     }
+
+    public function appliesToSameIssueAndDay(self $other): bool
+    {
+        return $this->date->equals($other->date)
+            && $this->issue->id === $other->issue->id;
+    }
 }

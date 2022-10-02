@@ -175,4 +175,38 @@ final class LogEntryTest extends TestCase
             ],
         ];
     }
+
+    /**
+     * @param non-empty-string $issueId1
+     * @param non-empty-string $issueId2
+     * @param non-empty-string $date1
+     * @param non-empty-string $date2
+     *
+     * @dataProvider examplesOfSameAndDifferentDayAndIssue
+     */
+    public function testAppliesToSameIssueAndDay(
+        string $issueId1,
+        string $issueId2,
+        string $date1,
+        string $date2,
+        bool $expected,
+    ): void {
+        self::assertSame(
+            $expected,
+            (new LogEntry(new JiraIssueId($issueId1), 'a description', 1, new SpentDate($date1)))
+                ->appliesToSameIssueAndDay(new LogEntry(new JiraIssueId($issueId2), 'another description', 2, new SpentDate($date2))),
+        );
+    }
+
+    /** @return non-empty-list<array{non-empty-string, non-empty-string, non-empty-string, non-empty-string, bool}> */
+    public function examplesOfSameAndDifferentDayAndIssue(): array
+    {
+        return [
+            ['AB12-123', 'AB12-123', '2022-08-01', '2022-08-01', true],
+            ['AB12-123', 'AB12-123', '2022-08-01', '2022-08-02', false],
+            ['AB12-123', 'AB12-123', '2022-08-02', '2022-08-01', false],
+            ['AB12-123', 'AB12-124', '2022-08-01', '2022-08-01', false],
+            ['AB12-124', 'AB12-123', '2022-08-01', '2022-08-01', false],
+        ];
+    }
 }
