@@ -11,7 +11,7 @@ use CrowdfoxTimeSync\Tempo\Domain\JiraIssueId;
 use CrowdfoxTimeSync\Tempo\Domain\LogEntry;
 use Psl;
 use Psr\Http\Client\ClientInterface;
-use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\RequestFactoryInterface;
 
 use function array_filter;
 use function array_map;
@@ -27,7 +27,7 @@ final class GetWorkLogEntriesViaTempoV4Api implements GetWorkLogEntries
      */
     public function __construct(
         private readonly ClientInterface $httpClient,
-        private readonly RequestInterface $blueprint,
+        private readonly RequestFactoryInterface $makeRequest,
         private readonly string $tempoBearerToken,
         private readonly JiraIssueId $fallbackJiraIssue,
     ) {
@@ -51,13 +51,13 @@ final class GetWorkLogEntriesViaTempoV4Api implements GetWorkLogEntries
             . '&to=' . $timeEntry->spent_date->toString()
             . '&limit=1000';
 
-        $request = $this->blueprint
-            ->withMethod('GET')
+        $request = $this->makeRequest
+            ->createRequest('GET', 'https://api.tempo.io/4/worklogs');
+
+        $request = $request
             ->withUri(
-                $this->blueprint->getUri()
-                    ->withScheme('https')
-                    ->withHost('api.tempo.io')
-                    ->withPath('4/worklogs')
+                $request
+                    ->getUri()
                     ->withQuery($query),
             )
             ->withHeader('Authorization', 'Bearer ' . $this->tempoBearerToken);

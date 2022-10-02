@@ -32,9 +32,7 @@ final class AddWorkLogEntriesViaTempoV4ApiTest extends TestCase
         $this->responseFactory = Psr17FactoryDiscovery::findResponseFactory();
         $this->addEntry        = new AddWorkLogEntryViaTempoV4Api(
             $this->httpClient,
-            Psr17FactoryDiscovery::findRequestFactory()
-                ->createRequest('GET', 'http://example.com')
-                ->withAddedHeader('X-Ocramius-Was-Here', 'a custom added header'),
+            Psr17FactoryDiscovery::findRequestFactory(),
             'abc123',
             'jiraid123',
         );
@@ -54,9 +52,10 @@ final class AddWorkLogEntriesViaTempoV4ApiTest extends TestCase
                 );
                 self::assertSame(
                     [
-                        'X-Ocramius-Was-Here' => ['a custom added header'],
                         'Host'                => ['api.tempo.io'],
                         'Authorization'       => ['Bearer abc123'],
+                        'Content-Type'        => ['application/json'],
+                        'Accept'              => ['application/json'],
                     ],
                     $request->getHeaders(),
                 );

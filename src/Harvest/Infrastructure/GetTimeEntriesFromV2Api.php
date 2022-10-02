@@ -9,7 +9,7 @@ use CrowdfoxTimeSync\Harvest\Domain\TimeEntry;
 use CuyZ\Valinor\Mapper\TreeMapper;
 use Psl;
 use Psr\Http\Client\ClientInterface;
-use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use Psr\Http\Message\UriInterface;
 
@@ -36,7 +36,7 @@ final class GetTimeEntriesFromV2Api implements GetTimeEntries
     public function __construct(
         private readonly ClientInterface $httpClient,
         private readonly UriFactoryInterface $uriFactory,
-        private readonly RequestInterface $blueprint,
+        private readonly RequestFactoryInterface $makeRequest,
         private readonly TreeMapper $mapper,
         private readonly string $harvestAccountId,
         private readonly string $harvestBearerToken,
@@ -87,13 +87,13 @@ final class GetTimeEntriesFromV2Api implements GetTimeEntries
      */
     private function fetchPage(UriInterface|null $uri, string $projectId): array
     {
-        $request = $this->blueprint
-            ->withUri(
+        $request = $this->makeRequest
+            ->createRequest(
+                'GET',
                 $uri
                 ?? $this->uriFactory->createUri('https://api.harvestapp.com/v2/time_entries')
                 ->withQuery(http_build_query(['project_id' => $projectId])),
             )
-            ->withMethod('GET')
             ->withAddedHeader('Harvest-Account-Id', $this->harvestAccountId)
             ->withAddedHeader('Authorization', 'Bearer ' . $this->harvestBearerToken)
             ->withAddedHeader('User-Agent', self::class);

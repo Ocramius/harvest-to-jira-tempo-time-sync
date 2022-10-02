@@ -8,7 +8,7 @@ use CrowdfoxTimeSync\Tempo\Domain\LogEntry;
 use CrowdfoxTimeSync\Tempo\Domain\SetWorkLogEntry;
 use Psl;
 use Psr\Http\Client\ClientInterface;
-use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\RequestFactoryInterface;
 
 final class AddWorkLogEntryViaTempoV4Api implements SetWorkLogEntry
 {
@@ -18,7 +18,7 @@ final class AddWorkLogEntryViaTempoV4Api implements SetWorkLogEntry
      */
     public function __construct(
         private readonly ClientInterface $httpClient,
-        private readonly RequestInterface $blueprint,
+        private readonly RequestFactoryInterface $makeRequest,
         private readonly string $tempoBearerToken,
         private readonly string $authorJiraAccountId,
     ) {
@@ -26,15 +26,11 @@ final class AddWorkLogEntryViaTempoV4Api implements SetWorkLogEntry
 
     public function __invoke(LogEntry $logEntry): void
     {
-        $request = $this->blueprint
-            ->withMethod('POST')
-            ->withUri(
-                $this->blueprint->getUri()
-                    ->withScheme('https')
-                    ->withHost('api.tempo.io')
-                    ->withPath('/4/worklogs'),
-            )
-            ->withHeader('Authorization', 'Bearer ' . $this->tempoBearerToken);
+        $request = $this->makeRequest
+            ->createRequest('POST', 'https://api.tempo.io/4/worklogs')
+            ->withHeader('Authorization', 'Bearer ' . $this->tempoBearerToken)
+            ->withHeader('Content-Type', 'application/json')
+            ->withHeader('Accept', 'application/json');
 
         $request
             ->getBody()

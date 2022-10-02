@@ -6,7 +6,7 @@
     errorLevel="1"
 >
     <projectFiles>
-<!--        <directory name="bin" />-->
+        <directory name="bin" />
         <directory name="src"/>
         <directory name="test"/>
 

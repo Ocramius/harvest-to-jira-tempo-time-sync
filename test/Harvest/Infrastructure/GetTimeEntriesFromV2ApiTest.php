@@ -34,9 +34,7 @@ final class GetTimeEntriesFromV2ApiTest extends TestCase
         $this->getTimeEntries  = new GetTimeEntriesFromV2Api(
             $this->httpClient,
             Psr17FactoryDiscovery::findUriFactory(),
-            Psr17FactoryDiscovery::findRequestFactory()
-                ->createRequest('GET', 'http://example.com')
-                ->withAddedHeader('X-Ocramius-Was-Here', 'a custom added header'),
+            Psr17FactoryDiscovery::findRequestFactory(),
             (new MapperBuilder())
                 ->flexible()
                 ->mapper(),
@@ -78,7 +76,6 @@ JSON,
                 );
                 self::assertEquals(
                     [
-                        'X-Ocramius-Was-Here' => ['a custom added header'],
                         'Host'                => ['api.harvestapp.com'],
                         'Harvest-Account-Id'  => ['abc123'],
                         'Authorization'       => ['Bearer super$ecret'],

@@ -6,7 +6,7 @@
     <arg name="colors"/>
     <arg value="np"/>
 
-<!--    <file>bin</file>-->
+    <file>bin</file>
     <file>src</file>
     <file>test</file>
 
