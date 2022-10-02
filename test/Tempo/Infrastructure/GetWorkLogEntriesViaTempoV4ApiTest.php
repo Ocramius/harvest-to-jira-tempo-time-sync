@@ -58,9 +58,9 @@ final class GetWorkLogEntriesViaTempoV4ApiTest extends TestCase
       },
       "timeSpentSeconds": 61,
       "billableSeconds": 60,
-      "startDate": "2022-10-01",
+      "startDate": "2022-08-09",
       "startTime": "00:00:00",
-      "description": "Working on issue foo"
+      "description": "Working on issue foo harvest:11111"
     },
     {
       "tempoWorklogId": 456,
@@ -70,9 +70,21 @@ final class GetWorkLogEntriesViaTempoV4ApiTest extends TestCase
       },
       "timeSpentSeconds": 64,
       "billableSeconds": 63,
-      "startDate": "2022-10-02",
+      "startDate": "2022-08-09",
       "startTime": "00:00:00",
-      "description": "Working on issue bar"
+      "description": "Working on issue bar harvest:11111"
+    },
+    {
+      "tempoWorklogId": 456,
+      "issue": {
+        "self": "https://foo.atlassian.net/rest/api/2/issue/AB-13",
+        "id": 456
+      },
+      "timeSpentSeconds": 64,
+      "billableSeconds": 63,
+      "startDate": "2022-08-09",
+      "startTime": "00:00:00",
+      "description": "This log will be ignored, because it doesn't match the input time entry harvest:12345"
     }
   ]
 }
@@ -102,10 +114,10 @@ JSON,
 
         self::assertEquals(
             [
-                new LogEntry(new JiraIssueId('AB-12'), 'Working on issue foo', 61, new SpentDate('2022-10-01')),
-                new LogEntry(new JiraIssueId('AB-13'), 'Working on issue bar', 64, new SpentDate('2022-10-02')),
+                new LogEntry(new JiraIssueId('AB-12'), 'Working on issue foo harvest:11111', 61, new SpentDate('2022-08-09')),
+                new LogEntry(new JiraIssueId('AB-13'), 'Working on issue bar harvest:11111', 64, new SpentDate('2022-08-09')),
             ],
-            ($this->getEntries)(new TimeEntry('123', 10.0, 'AB1-2, AB1-3, hello', new SpentDate('2022-08-09'))),
+            ($this->getEntries)(new TimeEntry('11111', 10.0, 'AB1-2, AB1-3, hello', new SpentDate('2022-08-09'))),
         );
     }
 

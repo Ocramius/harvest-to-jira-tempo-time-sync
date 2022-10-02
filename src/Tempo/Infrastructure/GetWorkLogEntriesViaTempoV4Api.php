@@ -67,7 +67,7 @@ final class GetWorkLogEntriesViaTempoV4Api implements GetWorkLogEntries
             'Request ' . $request->getUri()->__toString() . '  not successful: ' . $response->getStatusCode(),
         );
 
-        return array_map(
+        $logEntries = array_map(
             static fn (array $row): LogEntry => new LogEntry(
                 JiraIssueId::fromSelfUrl($row['issue']['self']),
                 $row['description'],
@@ -90,5 +90,10 @@ final class GetWorkLogEntriesViaTempoV4Api implements GetWorkLogEntries
                 ]),
             )['results'],
         );
+        
+        return array_values(array_filter(
+            $logEntries,
+            static fn (LogEntry $logEntry): bool => $logEntry->matchesTimeEntry($timeEntry),
+        ));
     }
 }
