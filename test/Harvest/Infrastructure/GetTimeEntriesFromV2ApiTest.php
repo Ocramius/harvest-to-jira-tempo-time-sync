@@ -55,6 +55,7 @@ final class GetTimeEntriesFromV2ApiTest extends TestCase
 {
   "time_entries":[
     {
+      "id": 111,
       "hours": 12.34,
       "notes": "foo bar",
       "spent_date": "2022-08-03"
@@ -91,7 +92,7 @@ JSON,
             ->willReturn($response);
 
         self::assertEquals(
-            [new TimeEntry(12.34, 'foo bar', new SpentDate('2022-08-03'))],
+            [new TimeEntry('111', 12.34, 'foo bar', new SpentDate('2022-08-03'))],
             ($this->getTimeEntries)('def456'),
         );
     }
@@ -122,6 +123,7 @@ JSON,
 {
   "time_entries":[
     {
+      "id": 111,
       "hours": 12.34,
       "notes": "foo bar",
       "spent_date": "2022-08-03"
@@ -139,6 +141,7 @@ JSON,
 {
   "time_entries":[
     {
+      "id": 222,
       "hours": 56.78,
       "notes": "baz tab",
       "spent_date": "2022-08-04"
@@ -156,6 +159,7 @@ JSON,
 {
   "time_entries":[
     {
+      "id": 333,
       "hours": 91.01,
       "notes": "taz tar",
       "spent_date": "2022-08-05"
@@ -190,9 +194,9 @@ JSON,
 
         self::assertEquals(
             [
-                new TimeEntry(12.34, 'foo bar', new SpentDate('2022-08-03')),
-                new TimeEntry(56.78, 'baz tab', new SpentDate('2022-08-04')),
-                new TimeEntry(91.01, 'taz tar', new SpentDate('2022-08-05')),
+                new TimeEntry('111', 12.34, 'foo bar', new SpentDate('2022-08-03')),
+                new TimeEntry('222', 56.78, 'baz tab', new SpentDate('2022-08-04')),
+                new TimeEntry('333', 91.01, 'taz tar', new SpentDate('2022-08-05')),
             ],
             ($this->getTimeEntries)('def456'),
         );

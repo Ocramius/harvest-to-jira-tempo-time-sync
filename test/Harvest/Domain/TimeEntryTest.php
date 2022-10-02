@@ -101,7 +101,7 @@ JSON,
         $this->expectException(InvariantViolationException::class);
         $this->expectExceptionMessage('Hours must be greater than zero');
 
-        new TimeEntry(-1.0, 'irrelevant', new SpentDate('2022-08-03'));
+        new TimeEntry('1', -1.0, 'irrelevant', new SpentDate('2022-08-03'));
     }
 
     public function testWillRejectZeroTime(): void
@@ -109,6 +109,6 @@ JSON,
         $this->expectException(InvariantViolationException::class);
         $this->expectExceptionMessage('Hours must be greater than zero');
 
-        new TimeEntry(0.0, 'irrelevant', new SpentDate('2022-08-03'));
+        new TimeEntry('1', 0.0, 'irrelevant', new SpentDate('2022-08-03'));
     }
 }

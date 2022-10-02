@@ -16,11 +16,14 @@ final class JiraIssueId
      * @throws InvariantViolationException on negative input hours.
      */
     public function __construct(
-        public readonly string $id
+        public readonly string $id,
     ) {
-        Psl\invariant(Psl\Regex\matches(
-            $id, '/^[A-Z][A-Z0-9]*-[0-9]+$/'),
-            'Invalid Jira issue ID: "' . $id . '"'
+        Psl\invariant(
+            Psl\Regex\matches(
+                $id,
+                '/^[A-Z][A-Z0-9]*-[0-9]+$/',
+            ),
+            'Invalid Jira issue ID: "' . $id . '"',
         );
     }
 }

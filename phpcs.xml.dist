@@ -10,5 +10,8 @@
     <file>src</file>
     <file>test</file>
 
-    <rule ref="Doctrine"/>
+    <rule ref="Doctrine">
+        <!-- some internal symbols have names matching their JSON serialized format (on purpose) -->
+        <exclude name="Squiz.NamingConventions.ValidVariableName.NotCamelCaps"/>
+    </rule>
 </ruleset>

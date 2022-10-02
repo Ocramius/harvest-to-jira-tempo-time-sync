@@ -12,9 +12,9 @@ use Psl\Exception\InvariantViolationException;
 final class JiraIssueIdTest extends TestCase
 {
     /**
-     * @dataProvider validIds
-     *
      * @param non-empty-string $id
+     *
+     * @dataProvider validIds
      */
     public function testValidJiraIssueId(string $id): void
     {
@@ -33,10 +33,10 @@ final class JiraIssueIdTest extends TestCase
     }
 
     /**
-     * @dataProvider invalidIds
-     *
      * @param non-empty-string $id
      * @param non-empty-string $expectedExceptionMessage
+     *
+     * @dataProvider invalidIds
      */
     public function testInvalidJiraIssueId(string $id, string $expectedExceptionMessage): void
     {
