@@ -13,5 +13,6 @@
     <rule ref="Doctrine">
         <!-- some internal symbols have names matching their JSON serialized format (on purpose) -->
         <exclude name="Squiz.NamingConventions.ValidVariableName.NotCamelCaps"/>
+        <exclude name="Squiz.NamingConventions.ValidVariableName.MemberNotCamelCaps"/>
     </rule>
 </ruleset>

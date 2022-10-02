@@ -61,4 +61,68 @@ final class JiraIssueIdTest extends TestCase
             ['A-1 ', 'Invalid Jira issue ID: "A-1 "'],
         ];
     }
+
+    /**
+     * @param non-empty-string $id
+     *
+     * @dataProvider validSelfUrls
+     */
+    public function testFromSelfUrl(string $url, string $id): void
+    {
+        self::assertSame($id, JiraIssueId::fromSelfUrl($url)->id);
+    }
+
+    /** @return non-empty-list<array{non-empty-string, non-empty-string}> */
+    public function validSelfUrls(): array
+    {
+        return [
+            ['/A-1', 'A-1'],
+            ['http://example.com/A-2', 'A-2'],
+            ['https://foo.atlassian.net/rest/api/2/issue/AB-123', 'AB-123'],
+        ];
+    }
+
+    /**
+     * @param non-empty-string $expectedExceptionMessage
+     *
+     * @dataProvider invalidSelfUrls
+     */
+    public function testFromInvalidSelfUrl(string $url, string $expectedExceptionMessage): void
+    {
+        $this->expectException(InvariantViolationException::class);
+        $this->expectExceptionMessage($expectedExceptionMessage);
+
+        JiraIssueId::fromSelfUrl($url);
+    }
+
+    /** @return non-empty-list<array{string, non-empty-string}> */
+    public function invalidSelfUrls(): array
+    {
+        return [
+            [
+                '',
+                'Url "" does not contain a Jira issue ID',
+            ],
+            [
+                '/A-',
+                'Url "/A-" does not contain a Jira issue ID',
+            ],
+            [
+                'http://example.com/FOO',
+                'Url "http://example.com/FOO" does not contain a Jira issue ID',
+            ],
+            [
+                'http://example.com/',
+                'Url "http://example.com/" does not contain a Jira issue ID',
+            ],
+            [
+                'https://foo.atlassian.net/rest/api/2/issue/',
+                'Url "https://foo.atlassian.net/rest/api/2/issue/" does not contain a Jira issue ID',
+            ],
+            [
+                'https://foo.atlassian.net/rest/api/2/issue/123',
+                'Url "https://foo.atlassian.net/rest/api/2/issue/123" does not contain a Jira issue ID',
+            ],
+        ];
+    }
 }
