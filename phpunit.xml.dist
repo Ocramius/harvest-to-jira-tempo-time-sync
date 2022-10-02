@@ -3,6 +3,8 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     colors="true"
     xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+    cacheResult="false"
+    beStrictAboutCoversAnnotation="true"
 >
     <testsuites>
         <testsuite name="all">

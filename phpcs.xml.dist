@@ -3,10 +3,10 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="vendor/squizlabs/php_codesniffer/phpcs.xsd"
 >
-    <arg name="ps" value="."/>
     <arg name="colors"/>
+    <arg value="np"/>
 
-    <file>bin</file>
+<!--    <file>bin</file>-->
     <file>src</file>
     <file>test</file>
 

@@ -1,0 +1,23 @@
+<?php
+
+declare(strict_types=1);
+
+namespace CrowdfoxTimeSync\Harvest\Domain;
+
+use Psl;
+use Psl\Exception\InvariantViolationException;
+
+final class TimeEntry
+{
+    /**
+     * @param non-empty-string $notes
+     *
+     * @throws InvariantViolationException on negative input hours.
+     */
+    public function __construct(
+        public readonly float $hours,
+        public readonly string $notes,
+    ) {
+        Psl\invariant($this->hours > 0, 'Hours must be greater than zero');
+    }
+}
