@@ -50,13 +50,15 @@ final class JiraIssueIdTest extends TestCase
     public function invalidIds(): array
     {
         return [
-            ['A', 'Invalid Jira issue ID: A'],
-            ['B-', 'Invalid Jira issue ID: B-'],
-            ['a-1', 'Invalid Jira issue ID: a-1'],
-            ['1-1', 'Invalid Jira issue ID: 1-1'],
-            ['A- 1', 'Invalid Jira issue ID: A- 1'],
-            ['A -1', 'Invalid Jira issue ID: A -1'],
-            ['A-A', 'Invalid Jira issue ID: A-A'],
+            ['A', 'Invalid Jira issue ID: "A"'],
+            ['B-', 'Invalid Jira issue ID: "B-"'],
+            ['a-1', 'Invalid Jira issue ID: "a-1"'],
+            ['1-1', 'Invalid Jira issue ID: "1-1"'],
+            ['A- 1', 'Invalid Jira issue ID: "A- 1"'],
+            ['A -1', 'Invalid Jira issue ID: "A -1"'],
+            ['A-A', 'Invalid Jira issue ID: "A-A"'],
+            [' A-1', 'Invalid Jira issue ID: " A-1"'],
+            ['A-1 ', 'Invalid Jira issue ID: "A-1 "'],
         ];
     }
 }
