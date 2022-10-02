@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CrowdfoxTimeSyncTest\Harvest\Domain;
 
+use CrowdfoxTimeSync\Harvest\Domain\SpentDate;
 use CrowdfoxTimeSync\Harvest\Domain\TimeEntry;
 use CuyZ\Valinor\Mapper\Source\JsonSource;
 use CuyZ\Valinor\MapperBuilder;
@@ -100,7 +101,7 @@ JSON,
         $this->expectException(InvariantViolationException::class);
         $this->expectExceptionMessage('Hours must be greater than zero');
 
-        new TimeEntry(-1.0, 'irrelevant');
+        new TimeEntry(-1.0, 'irrelevant', new SpentDate('2022-08-03'));
     }
 
     public function testWillRejectZeroTime(): void
@@ -108,6 +109,6 @@ JSON,
         $this->expectException(InvariantViolationException::class);
         $this->expectExceptionMessage('Hours must be greater than zero');
 
-        new TimeEntry(0.0, 'irrelevant');
+        new TimeEntry(0.0, 'irrelevant', new SpentDate('2022-08-03'));
     }
 }
