@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CrowdfoxTimeSync\Tempo\Infrastructure;
 
+use CrowdfoxTimeSync\Harvest\Domain\SpentDate;
 use CrowdfoxTimeSync\Harvest\Domain\TimeEntry;
 use CrowdfoxTimeSync\Tempo\Domain\GetWorkLogEntries;
 use CrowdfoxTimeSync\Tempo\Domain\JiraIssueId;
@@ -71,6 +72,7 @@ final class GetWorkLogEntriesViaTempoV4Api implements GetWorkLogEntries
                 JiraIssueId::fromSelfUrl($row['issue']['self']),
                 $row['description'],
                 $row['timeSpentSeconds'],
+                new SpentDate($row['startDate']),
             ),
             Psl\Json\typed(
                 $response
@@ -78,11 +80,12 @@ final class GetWorkLogEntriesViaTempoV4Api implements GetWorkLogEntries
                     ->__toString(),
                 Psl\Type\shape([
                     'results' => Psl\Type\vec(Psl\Type\shape([
-                        'issue' => Psl\Type\shape([
+                        'issue'            => Psl\Type\shape([
                             'self' => Psl\Type\non_empty_string(),
                         ]),
                         'timeSpentSeconds' => Psl\Type\positive_int(),
-                        'description' => Psl\Type\string(),
+                        'description'      => Psl\Type\string(),
+                        'startDate'        => Psl\Type\non_empty_string(),
                     ])),
                 ]),
             )['results'],

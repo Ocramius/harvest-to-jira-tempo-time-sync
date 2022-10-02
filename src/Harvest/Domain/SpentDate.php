@@ -28,4 +28,9 @@ final class SpentDate
     {
         return $this->spentDate->format('Y-m-d');
     }
+
+    public function equals(self $other): bool
+    {
+        return $this->toString() === $other->toString();
+    }
 }

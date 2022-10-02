@@ -42,4 +42,16 @@ final class SpentDateTest extends TestCase
 
         new SpentDate('2022-02-28 01:02:03');
     }
+
+    public function testEquality(): void
+    {
+        self::assertTrue(
+            (new SpentDate('2022-02-28'))
+                ->equals(new SpentDate('2022-02-28')),
+        );
+        self::assertFalse(
+            (new SpentDate('2022-02-27'))
+                ->equals(new SpentDate('2022-02-28')),
+        );
+    }
 }

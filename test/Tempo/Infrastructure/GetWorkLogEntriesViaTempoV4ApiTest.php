@@ -12,6 +12,7 @@ use CrowdfoxTimeSync\Tempo\Infrastructure\GetWorkLogEntriesViaTempoV4Api;
 use Http\Discovery\Psr17FactoryDiscovery;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psl\Exception\InvariantViolationException;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -57,7 +58,7 @@ final class GetWorkLogEntriesViaTempoV4ApiTest extends TestCase
       },
       "timeSpentSeconds": 61,
       "billableSeconds": 60,
-      "startDate": "2022-10-02",
+      "startDate": "2022-10-01",
       "startTime": "00:00:00",
       "description": "Working on issue foo"
     },
@@ -101,10 +102,24 @@ JSON,
 
         self::assertEquals(
             [
-                new LogEntry(new JiraIssueId('AB-12'), 'Working on issue foo', 61),
-                new LogEntry(new JiraIssueId('AB-13'), 'Working on issue bar', 64),
+                new LogEntry(new JiraIssueId('AB-12'), 'Working on issue foo', 61, new SpentDate('2022-10-01')),
+                new LogEntry(new JiraIssueId('AB-13'), 'Working on issue bar', 64, new SpentDate('2022-10-02')),
             ],
             ($this->getEntries)(new TimeEntry('123', 10.0, 'AB1-2, AB1-3, hello', new SpentDate('2022-08-09'))),
         );
+    }
+
+    public function testWillRejectNon200HttpResponses(): void
+    {
+        $response = $this->responseFactory->createResponse(201);
+
+        $this->httpClient->expects(self::once())
+            ->method('sendRequest')
+            ->willReturn($response);
+
+        $this->expectException(InvariantViolationException::class);
+        $this->expectExceptionMessage('Request https://api.tempo.io/4/worklogs?issue=AB1-2&issue=AB1-3&issue=FALLBACK-123&from=2022-08-09&to=2022-08-09&limit=1000  not successful: 201');
+
+        ($this->getEntries)(new TimeEntry('123', 10.0, 'AB1-2, AB1-3, hello', new SpentDate('2022-08-09')));
     }
 }

@@ -22,7 +22,7 @@ final class LogEntryTest extends TestCase
     public function testMatchesGivenTimeEntry(string $description, string $harvestId): void
     {
         self::assertTrue(
-            (new LogEntry(new JiraIssueId('AB12-123'), $description, 1))
+            (new LogEntry(new JiraIssueId('AB12-123'), $description, 1, new SpentDate('2022-08-07')))
                 ->matchesTimeEntry(new TimeEntry($harvestId, 0.1, 'hello', new SpentDate('2022-08-07'))),
         );
     }
@@ -47,7 +47,7 @@ final class LogEntryTest extends TestCase
     public function testDoesNotMatchGivenTimeEntry(string $description, string $harvestId): void
     {
         self::assertFalse(
-            (new LogEntry(new JiraIssueId('AB12-123'), $description, 1))
+            (new LogEntry(new JiraIssueId('AB12-123'), $description, 1, new SpentDate('2022-08-07')))
                 ->matchesTimeEntry(new TimeEntry($harvestId, 0.1, 'hello', new SpentDate('2022-08-07'))),
         );
     }
@@ -67,6 +67,19 @@ final class LogEntryTest extends TestCase
             ['harvast:12345', '12345'],
             ['harvest:12345 and something after it', '12345'],
         ];
+    }
+
+    /**
+     * @param non-empty-string $harvestId
+     *
+     * @dataProvider logDescriptionsMatchingHarvestIdentifiers
+     */
+    public function testDoesNotMatchGivenTimeEntryIfDateDoesNotMatch(string $description, string $harvestId): void
+    {
+        self::assertFalse(
+            (new LogEntry(new JiraIssueId('AB12-123'), $description, 1, new SpentDate('2022-08-07')))
+                ->matchesTimeEntry(new TimeEntry($harvestId, 0.1, 'hello', new SpentDate('2022-08-08'))),
+        );
     }
 
     /**
@@ -94,10 +107,10 @@ final class LogEntryTest extends TestCase
                     new SpentDate('2022-09-05'),
                 ),
                 [
-                    new LogEntry(new JiraIssueId('AB12-10'), 'AB12-10 harvest:123', 9000),
-                    new LogEntry(new JiraIssueId('AB12-20'), 'AB12-20 harvest:123', 9000),
-                    new LogEntry(new JiraIssueId('AB12-30'), 'AB12-30 harvest:123', 9000),
-                    new LogEntry(new JiraIssueId('AB12-40'), 'AB12-40 harvest:123', 9000),
+                    new LogEntry(new JiraIssueId('AB12-10'), 'AB12-10 harvest:123', 9000, new SpentDate('2022-09-05')),
+                    new LogEntry(new JiraIssueId('AB12-20'), 'AB12-20 harvest:123', 9000, new SpentDate('2022-09-05')),
+                    new LogEntry(new JiraIssueId('AB12-30'), 'AB12-30 harvest:123', 9000, new SpentDate('2022-09-05')),
+                    new LogEntry(new JiraIssueId('AB12-40'), 'AB12-40 harvest:123', 9000, new SpentDate('2022-09-05')),
                 ],
             ],
             'time entry with no assigned issue'               => [
@@ -108,7 +121,7 @@ final class LogEntryTest extends TestCase
                     new SpentDate('2022-09-05'),
                 ),
                 [
-                    new LogEntry(new JiraIssueId('A1-1'), 'A1-1 harvest:124', 36000),
+                    new LogEntry(new JiraIssueId('A1-1'), 'A1-1 harvest:124', 36000, new SpentDate('2022-09-05')),
                 ],
             ],
             'time entry with no assigned issue, but with a description'               => [
@@ -119,7 +132,7 @@ final class LogEntryTest extends TestCase
                     new SpentDate('2022-09-05'),
                 ),
                 [
-                    new LogEntry(new JiraIssueId('A1-1'), 'hello world A1-1 harvest:124', 36000),
+                    new LogEntry(new JiraIssueId('A1-1'), 'hello world A1-1 harvest:124', 36000, new SpentDate('2022-09-05')),
                 ],
             ],
             'time entry with multiple issues in single CSV entry'               => [
@@ -130,10 +143,10 @@ final class LogEntryTest extends TestCase
                     new SpentDate('2022-09-05'),
                 ),
                 [
-                    new LogEntry(new JiraIssueId('A1-2'), 'A1-1 A1-2 harvest:125', 9000),
-                    new LogEntry(new JiraIssueId('A2-4'), 'A2-3 A2-4 harvest:125', 9000),
-                    new LogEntry(new JiraIssueId('A3-5'), 'A3-5 harvest:125', 9000),
-                    new LogEntry(new JiraIssueId('A4-6'), 'A4-6 harvest:125', 9000),
+                    new LogEntry(new JiraIssueId('A1-2'), 'A1-1 A1-2 harvest:125', 9000, new SpentDate('2022-09-05')),
+                    new LogEntry(new JiraIssueId('A2-4'), 'A2-3 A2-4 harvest:125', 9000, new SpentDate('2022-09-05')),
+                    new LogEntry(new JiraIssueId('A3-5'), 'A3-5 harvest:125', 9000, new SpentDate('2022-09-05')),
+                    new LogEntry(new JiraIssueId('A4-6'), 'A4-6 harvest:125', 9000, new SpentDate('2022-09-05')),
                 ],
             ],
             'log entries with a short description'               => [
@@ -144,8 +157,8 @@ final class LogEntryTest extends TestCase
                     new SpentDate('2022-09-05'),
                 ),
                 [
-                    new LogEntry(new JiraIssueId('A1-1'), 'A1-1 done some work harvest:125', 18000),
-                    new LogEntry(new JiraIssueId('A2-2'), 'more A2-2 work harvest:125', 18000),
+                    new LogEntry(new JiraIssueId('A1-1'), 'A1-1 done some work harvest:125', 18000, new SpentDate('2022-09-05')),
+                    new LogEntry(new JiraIssueId('A2-2'), 'more A2-2 work harvest:125', 18000, new SpentDate('2022-09-05')),
                 ],
             ],
             'log entries with issue id, as well as issues without id'               => [
@@ -156,8 +169,8 @@ final class LogEntryTest extends TestCase
                     new SpentDate('2022-09-05'),
                 ),
                 [
-                    new LogEntry(new JiraIssueId('A2-2'), 'A2-2 done some work harvest:125', 18000),
-                    new LogEntry(new JiraIssueId('A1-1'), 'more work A1-1 harvest:125', 18000),
+                    new LogEntry(new JiraIssueId('A2-2'), 'A2-2 done some work harvest:125', 18000, new SpentDate('2022-09-05')),
+                    new LogEntry(new JiraIssueId('A1-1'), 'more work A1-1 harvest:125', 18000, new SpentDate('2022-09-05')),
                 ],
             ],
         ];

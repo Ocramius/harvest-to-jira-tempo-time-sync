@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CrowdfoxTimeSync\Tempo\Domain;
 
+use CrowdfoxTimeSync\Harvest\Domain\SpentDate;
 use CrowdfoxTimeSync\Harvest\Domain\TimeEntry;
 use Psl;
 
@@ -22,6 +23,7 @@ final class LogEntry
         public readonly JiraIssueId $issue,
         public readonly string $description,
         public readonly int $seconds,
+        public readonly SpentDate $date,
     ) {
     }
 
@@ -58,6 +60,7 @@ final class LogEntry
                 $issue,
                 $description . ' harvest:' . $entry->id,
                 $timeSplit,
+                $entry->spent_date,
             ),
             $issues,
             array_keys($issues),
@@ -70,6 +73,7 @@ final class LogEntry
 
     public function matchesTimeEntry(TimeEntry $entry): bool
     {
-        return Psl\Regex\matches($this->description, '#harvest:' . preg_quote($entry->id, '#') . '$#');
+        return $entry->spent_date->equals($this->date)
+            && Psl\Regex\matches($this->description, '#harvest:' . preg_quote($entry->id, '#') . '$#');
     }
 }
