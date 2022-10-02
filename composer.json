@@ -1,6 +1,7 @@
 {
     "name": "ocramius/crowdfox-time-sync",
     "description": "Syncs time from harvest to Tempo",
+    "license": "proprietary",
     "require": {
         "php": "~8.1",
         "cuyz/valinor": "^0.14.0",
