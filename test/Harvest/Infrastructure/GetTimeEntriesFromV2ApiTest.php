@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CrowdfoxTimeSyncTest\Harvest\Infrastructure;
 
+use CrowdfoxTimeSync\Harvest\Domain\SpentDate;
 use CrowdfoxTimeSync\Harvest\Domain\TimeEntry;
 use CrowdfoxTimeSync\Harvest\Infrastructure\GetTimeEntriesFromV2Api;
 use CuyZ\Valinor\MapperBuilder;
@@ -55,7 +56,8 @@ final class GetTimeEntriesFromV2ApiTest extends TestCase
   "time_entries":[
     {
       "hours": 12.34,
-      "notes": "foo bar"
+      "notes": "foo bar",
+      "spent_date": "2022-08-03"
     }
   ],
   "links":{
@@ -89,7 +91,7 @@ JSON,
             ->willReturn($response);
 
         self::assertEquals(
-            [new TimeEntry(12.34, 'foo bar')],
+            [new TimeEntry(12.34, 'foo bar', new SpentDate('2022-08-03'))],
             ($this->getTimeEntries)('def456'),
         );
     }
@@ -121,7 +123,8 @@ JSON,
   "time_entries":[
     {
       "hours": 12.34,
-      "notes": "foo bar"
+      "notes": "foo bar",
+      "spent_date": "2022-08-03"
     }
   ],
   "links":{
@@ -137,7 +140,8 @@ JSON,
   "time_entries":[
     {
       "hours": 56.78,
-      "notes": "baz tab"
+      "notes": "baz tab",
+      "spent_date": "2022-08-04"
     }
   ],
   "links":{
@@ -153,7 +157,8 @@ JSON,
   "time_entries":[
     {
       "hours": 91.01,
-      "notes": "taz tar"
+      "notes": "taz tar",
+      "spent_date": "2022-08-05"
     }
   ],
   "links":{
@@ -185,9 +190,9 @@ JSON,
 
         self::assertEquals(
             [
-                new TimeEntry(12.34, 'foo bar'),
-                new TimeEntry(56.78, 'baz tab'),
-                new TimeEntry(91.01, 'taz tar'),
+                new TimeEntry(12.34, 'foo bar', new SpentDate('2022-08-03')),
+                new TimeEntry(56.78, 'baz tab', new SpentDate('2022-08-04')),
+                new TimeEntry(91.01, 'taz tar', new SpentDate('2022-08-05')),
             ],
             ($this->getTimeEntries)('def456'),
         );
