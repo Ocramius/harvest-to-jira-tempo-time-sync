@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<ruleset
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="vendor/squizlabs/php_codesniffer/phpcs.xsd"
+>
+    <arg name="colors"/>
+    <arg value="np"/>
+
+    <file>bin</file>
+    <file>src</file>
+    <file>test</file>
+
+    <rule ref="Doctrine">
+        <!-- some internal symbols have names matching their JSON serialized format (on purpose) -->
+        <exclude name="Squiz.NamingConventions.ValidVariableName.NotCamelCaps"/>
+        <exclude name="Squiz.NamingConventions.ValidVariableName.MemberNotCamelCaps"/>
+    </rule>
+</ruleset>

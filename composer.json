@@ -1,11 +1,40 @@
 {
-    "name": "ocramius/crowdfox-time-sync",
-    "description": "Syncs time from harvest to Tempo",
+    "name": "ocramius/time-sync",
+    "description": "Syncs time from Harvest to Tempo",
     "license": "proprietary",
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        },
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "TimeSync\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "TimeSyncTest\\": "src"
+        }
+    },
     "require": {
         "php": "~8.1",
+        "azjezz/psl": "^2.0.3",
         "cuyz/valinor": "^0.14.0",
+        "laminas/laminas-diactoros": "^2.17",
+        "php-http/curl-client": "^2.2",
+        "php-http/discovery": "^1.14",
         "php-http/httplug": "^2.3.0",
-        "psr/http-client": "^1.0.1"
+        "psr/http-client": "^1.0.1",
+        "psr/http-factory": "^1.0.1"
+    },
+    "require-dev": {
+        "doctrine/coding-standard": "^10.0",
+        "php-standard-library/psalm-plugin": "^2.0.2",
+        "phpunit/phpunit": "^9.5.25",
+        "psalm/plugin-phpunit": "^0.17.0",
+        "squizlabs/php_codesniffer": "^3.7",
+        "vimeo/psalm": "^4.27"
     }
 }
