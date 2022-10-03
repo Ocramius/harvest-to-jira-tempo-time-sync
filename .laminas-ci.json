@@ -2,6 +2,9 @@
     "exclude": [
         {
             "name": "PHPUnit [8.1, lowest]"
+        },
+        {
+            "name": "PHPUnit [8.1, latest]"
         }
     ]
 }
