@@ -20,6 +20,7 @@
     },
     "require": {
         "php": "~8.1",
+        "ext-bcmath": "*",
         "azjezz/psl": "^2.0.3",
         "cuyz/valinor": "^0.14.0",
         "laminas/laminas-diactoros": "^2.17",
