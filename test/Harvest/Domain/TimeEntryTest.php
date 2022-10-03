@@ -30,7 +30,7 @@ final class TimeEntryTest extends TestCase
   "hours": 7.1,
   "hours_without_timer": 7.1,
   "rounded_hours": 7.25,
-  "notes": "CR-56, debugging CR-55 with QA/OPS, BE Refinement meeting, MA Refinement meeting, meeting with Sven Kroll about CR-56 approach",
+  "notes": "CR-56, debugging CR-55 with QA/OPS, BE Refinement meeting, MA Refinement meeting, meeting about CR-56 approach",
   "is_locked": true,
   "locked_reason": "Item Invoiced and Locked for this Time Period",
   "is_closed": false,
@@ -93,7 +93,7 @@ JSON,
         );
 
         self::assertSame(7.1, $record->hours);
-        self::assertSame('CR-56, debugging CR-55 with QA/OPS, BE Refinement meeting, MA Refinement meeting, meeting with Sven Kroll about CR-56 approach', $record->notes);
+        self::assertSame('CR-56, debugging CR-55 with QA/OPS, BE Refinement meeting, MA Refinement meeting, meeting about CR-56 approach', $record->notes);
     }
 
     public function testWillRejectNegativeTime(): void
