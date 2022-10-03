@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace CrowdfoxTimeSync\Tempo\Infrastructure;
+namespace TimeSync\Tempo\Infrastructure;
 
-use CrowdfoxTimeSync\Harvest\Domain\SpentDate;
-use CrowdfoxTimeSync\Harvest\Domain\TimeEntry;
-use CrowdfoxTimeSync\Tempo\Domain\GetWorkLogEntries;
-use CrowdfoxTimeSync\Tempo\Domain\JiraIssueId;
-use CrowdfoxTimeSync\Tempo\Domain\LogEntry;
 use Psl;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
+use TimeSync\Harvest\Domain\SpentDate;
+use TimeSync\Harvest\Domain\TimeEntry;
+use TimeSync\Tempo\Domain\GetWorkLogEntries;
+use TimeSync\Tempo\Domain\JiraIssueId;
+use TimeSync\Tempo\Domain\LogEntry;
 
 use function array_filter;
 use function array_map;

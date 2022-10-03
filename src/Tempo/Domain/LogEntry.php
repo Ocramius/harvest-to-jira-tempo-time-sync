@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace CrowdfoxTimeSync\Tempo\Domain;
+namespace TimeSync\Tempo\Domain;
 
-use CrowdfoxTimeSync\Harvest\Domain\SpentDate;
-use CrowdfoxTimeSync\Harvest\Domain\TimeEntry;
 use Psl;
+use TimeSync\Harvest\Domain\SpentDate;
+use TimeSync\Harvest\Domain\TimeEntry;
 
 use function array_keys;
 use function array_map;

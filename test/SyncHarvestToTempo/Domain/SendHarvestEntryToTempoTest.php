@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace CrowdfoxTimeSyncTest\SyncHarvestToTempo\Domain;
+namespace TimeSyncTest\SyncHarvestToTempo\Domain;
 
-use CrowdfoxTimeSync\Harvest\Domain\SpentDate;
-use CrowdfoxTimeSync\Harvest\Domain\TimeEntry;
-use CrowdfoxTimeSync\SyncHarvestToTempo\Domain\SendHarvestEntryToTempo;
-use CrowdfoxTimeSync\Tempo\Domain\GetWorkLogEntries;
-use CrowdfoxTimeSync\Tempo\Domain\JiraIssueId;
-use CrowdfoxTimeSync\Tempo\Domain\LogEntry;
-use CrowdfoxTimeSync\Tempo\Domain\SetWorkLogEntry;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use TimeSync\Harvest\Domain\SpentDate;
+use TimeSync\Harvest\Domain\TimeEntry;
+use TimeSync\SyncHarvestToTempo\Domain\SendHarvestEntryToTempo;
+use TimeSync\Tempo\Domain\GetWorkLogEntries;
+use TimeSync\Tempo\Domain\JiraIssueId;
+use TimeSync\Tempo\Domain\LogEntry;
+use TimeSync\Tempo\Domain\SetWorkLogEntry;
 
-/** @covers \CrowdfoxTimeSync\SyncHarvestToTempo\Domain\SendHarvestEntryToTempo */
+/** @covers \TimeSync\SyncHarvestToTempo\Domain\SendHarvestEntryToTempo */
 final class SendHarvestEntryToTempoTest extends TestCase
 {
     /** @var GetWorkLogEntries&MockObject */

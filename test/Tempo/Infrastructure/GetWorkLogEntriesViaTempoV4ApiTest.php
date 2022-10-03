@@ -2,13 +2,8 @@
 
 declare(strict_types=1);
 
-namespace CrowdfoxTimeSyncTest\Tempo\Infrastructure;
+namespace TimeSyncTest\Tempo\Infrastructure;
 
-use CrowdfoxTimeSync\Harvest\Domain\SpentDate;
-use CrowdfoxTimeSync\Harvest\Domain\TimeEntry;
-use CrowdfoxTimeSync\Tempo\Domain\JiraIssueId;
-use CrowdfoxTimeSync\Tempo\Domain\LogEntry;
-use CrowdfoxTimeSync\Tempo\Infrastructure\GetWorkLogEntriesViaTempoV4Api;
 use Http\Discovery\Psr17FactoryDiscovery;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -16,8 +11,13 @@ use Psl\Exception\InvariantViolationException;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
+use TimeSync\Harvest\Domain\SpentDate;
+use TimeSync\Harvest\Domain\TimeEntry;
+use TimeSync\Tempo\Domain\JiraIssueId;
+use TimeSync\Tempo\Domain\LogEntry;
+use TimeSync\Tempo\Infrastructure\GetWorkLogEntriesViaTempoV4Api;
 
-/** @covers \CrowdfoxTimeSync\Tempo\Infrastructure\GetWorkLogEntriesViaTempoV4Api */
+/** @covers \TimeSync\Tempo\Infrastructure\GetWorkLogEntriesViaTempoV4Api */
 final class GetWorkLogEntriesViaTempoV4ApiTest extends TestCase
 {
     /** @var ClientInterface&MockObject */

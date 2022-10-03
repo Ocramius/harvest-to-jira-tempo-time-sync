@@ -3,17 +3,17 @@
 
 declare(strict_types=1);
 
-namespace CrowdfoxTimeSync\Bin;
+namespace TimeSync\Bin;
 
-use CrowdfoxTimeSync\Harvest\Infrastructure\GetTimeEntriesFromV2Api;
-use CrowdfoxTimeSync\SyncHarvestToTempo\Domain\SendHarvestEntryToTempo;
-use CrowdfoxTimeSync\Tempo\Domain\JiraIssueId;
-use CrowdfoxTimeSync\Tempo\Infrastructure\AddWorkLogEntryViaTempoV4Api;
-use CrowdfoxTimeSync\Tempo\Infrastructure\GetWorkLogEntriesViaTempoV4Api;
 use CuyZ\Valinor\MapperBuilder;
 use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Psl;
+use TimeSync\Harvest\Infrastructure\GetTimeEntriesFromV2Api;
+use TimeSync\SyncHarvestToTempo\Domain\SendHarvestEntryToTempo;
+use TimeSync\Tempo\Domain\JiraIssueId;
+use TimeSync\Tempo\Infrastructure\AddWorkLogEntryViaTempoV4Api;
+use TimeSync\Tempo\Infrastructure\GetWorkLogEntriesViaTempoV4Api;
 
 (static function (): void {
     require_once __DIR__ . '/../vendor/autoload.php';

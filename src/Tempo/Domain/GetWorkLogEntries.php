@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace CrowdfoxTimeSync\Tempo\Domain;
+namespace TimeSync\Tempo\Domain;
 
-use CrowdfoxTimeSync\Harvest\Domain\TimeEntry;
+use TimeSync\Harvest\Domain\TimeEntry;
 
 interface GetWorkLogEntries
 {

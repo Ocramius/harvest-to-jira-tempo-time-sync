@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace CrowdfoxTimeSyncTest\Tempo\Domain;
+namespace TimeSyncTest\Tempo\Domain;
 
-use CrowdfoxTimeSync\Harvest\Domain\SpentDate;
-use CrowdfoxTimeSync\Harvest\Domain\TimeEntry;
-use CrowdfoxTimeSync\Tempo\Domain\JiraIssueId;
-use CrowdfoxTimeSync\Tempo\Domain\LogEntry;
 use PHPUnit\Framework\TestCase;
+use TimeSync\Harvest\Domain\SpentDate;
+use TimeSync\Harvest\Domain\TimeEntry;
+use TimeSync\Tempo\Domain\JiraIssueId;
+use TimeSync\Tempo\Domain\LogEntry;
 
-/** @covers \CrowdfoxTimeSync\Tempo\Domain\LogEntry */
+/** @covers \TimeSync\Tempo\Domain\LogEntry */
 final class LogEntryTest extends TestCase
 {
     /**

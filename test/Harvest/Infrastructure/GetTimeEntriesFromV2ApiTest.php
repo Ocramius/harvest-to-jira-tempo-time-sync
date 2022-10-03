@@ -2,11 +2,8 @@
 
 declare(strict_types=1);
 
-namespace CrowdfoxTimeSyncTest\Harvest\Infrastructure;
+namespace TimeSyncTest\Harvest\Infrastructure;
 
-use CrowdfoxTimeSync\Harvest\Domain\SpentDate;
-use CrowdfoxTimeSync\Harvest\Domain\TimeEntry;
-use CrowdfoxTimeSync\Harvest\Infrastructure\GetTimeEntriesFromV2Api;
 use CuyZ\Valinor\MapperBuilder;
 use Http\Discovery\Psr17FactoryDiscovery;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -16,8 +13,11 @@ use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
+use TimeSync\Harvest\Domain\SpentDate;
+use TimeSync\Harvest\Domain\TimeEntry;
+use TimeSync\Harvest\Infrastructure\GetTimeEntriesFromV2Api;
 
-/** @covers \CrowdfoxTimeSync\Harvest\Infrastructure\GetTimeEntriesFromV2Api */
+/** @covers \TimeSync\Harvest\Infrastructure\GetTimeEntriesFromV2Api */
 final class GetTimeEntriesFromV2ApiTest extends TestCase
 {
     /** @var MockObject&ClientInterface */

@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace CrowdfoxTimeSync\Harvest\Infrastructure;
+namespace TimeSync\Harvest\Infrastructure;
 
-use CrowdfoxTimeSync\Harvest\Domain\GetTimeEntries;
-use CrowdfoxTimeSync\Harvest\Domain\TimeEntry;
 use CuyZ\Valinor\Mapper\TreeMapper;
 use Psl;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use Psr\Http\Message\UriInterface;
+use TimeSync\Harvest\Domain\GetTimeEntries;
+use TimeSync\Harvest\Domain\TimeEntry;
 
 use function array_map;
 use function array_merge;

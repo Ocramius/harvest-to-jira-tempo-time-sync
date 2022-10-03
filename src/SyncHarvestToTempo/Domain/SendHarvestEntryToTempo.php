@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace CrowdfoxTimeSync\SyncHarvestToTempo\Domain;
+namespace TimeSync\SyncHarvestToTempo\Domain;
 
-use CrowdfoxTimeSync\Harvest\Domain\TimeEntry;
-use CrowdfoxTimeSync\Tempo\Domain\GetWorkLogEntries;
-use CrowdfoxTimeSync\Tempo\Domain\JiraIssueId;
-use CrowdfoxTimeSync\Tempo\Domain\LogEntry;
-use CrowdfoxTimeSync\Tempo\Domain\SetWorkLogEntry;
 use Psl;
+use TimeSync\Harvest\Domain\TimeEntry;
+use TimeSync\Tempo\Domain\GetWorkLogEntries;
+use TimeSync\Tempo\Domain\JiraIssueId;
+use TimeSync\Tempo\Domain\LogEntry;
+use TimeSync\Tempo\Domain\SetWorkLogEntry;
 
 use function array_filter;
 

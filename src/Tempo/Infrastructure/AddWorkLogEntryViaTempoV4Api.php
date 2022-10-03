@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace CrowdfoxTimeSync\Tempo\Infrastructure;
+namespace TimeSync\Tempo\Infrastructure;
 
-use CrowdfoxTimeSync\Tempo\Domain\LogEntry;
-use CrowdfoxTimeSync\Tempo\Domain\SetWorkLogEntry;
 use Psl;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
+use TimeSync\Tempo\Domain\LogEntry;
+use TimeSync\Tempo\Domain\SetWorkLogEntry;
 
 final class AddWorkLogEntryViaTempoV4Api implements SetWorkLogEntry
 {

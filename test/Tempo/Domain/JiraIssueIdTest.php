@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace CrowdfoxTimeSyncTest\Tempo\Domain;
+namespace TimeSyncTest\Tempo\Domain;
 
-use CrowdfoxTimeSync\Tempo\Domain\JiraIssueId;
 use PHPUnit\Framework\TestCase;
 use Psl\Exception\InvariantViolationException;
+use TimeSync\Tempo\Domain\JiraIssueId;
 
-/** @covers \CrowdfoxTimeSync\Tempo\Domain\JiraIssueId */
+/** @covers \TimeSync\Tempo\Domain\JiraIssueId */
 final class JiraIssueIdTest extends TestCase
 {
     /**

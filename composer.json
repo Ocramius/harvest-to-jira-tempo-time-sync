@@ -1,6 +1,6 @@
 {
-    "name": "ocramius/crowdfox-time-sync",
-    "description": "Syncs time from harvest to Tempo",
+    "name": "ocramius/time-sync",
+    "description": "Syncs time from Harvest to Tempo",
     "license": "proprietary",
     "config": {
         "allow-plugins": {
@@ -10,12 +10,12 @@
     },
     "autoload": {
         "psr-4": {
-            "CrowdfoxTimeSync\\": "src"
+            "TimeSync\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "CrowdfoxTimeSyncTest\\": "src"
+            "TimeSyncTest\\": "src"
         }
     },
     "require": {

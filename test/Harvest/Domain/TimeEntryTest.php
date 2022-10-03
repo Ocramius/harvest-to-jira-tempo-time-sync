@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace CrowdfoxTimeSyncTest\Harvest\Domain;
+namespace TimeSyncTest\Harvest\Domain;
 
-use CrowdfoxTimeSync\Harvest\Domain\SpentDate;
-use CrowdfoxTimeSync\Harvest\Domain\TimeEntry;
 use CuyZ\Valinor\Mapper\Source\JsonSource;
 use CuyZ\Valinor\MapperBuilder;
 use PHPUnit\Framework\TestCase;
 use Psl\Exception\InvariantViolationException;
+use TimeSync\Harvest\Domain\SpentDate;
+use TimeSync\Harvest\Domain\TimeEntry;
 
-/** @covers \CrowdfoxTimeSync\Harvest\Domain\TimeEntry */
+/** @covers \TimeSync\Harvest\Domain\TimeEntry */
 final class TimeEntryTest extends TestCase
 {
     public function testCanHydrateFromHarvestRecord(): void
@@ -51,12 +51,12 @@ final class TimeEntryTest extends TestCase
   },
   "client": {
     "id": 12206987,
-    "name": "Crowdfox GmbH",
+    "name": " GmbH",
     "currency": "EUR"
   },
   "project": {
     "id": 33026870,
-    "name": "Crowdfox",
+    "name": "",
     "code": "CFX"
   },
   "task": {

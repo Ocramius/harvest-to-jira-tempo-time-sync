@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CrowdfoxTimeSync\Harvest\Domain;
+namespace TimeSync\Harvest\Domain;
 
 use Psl;
 use Psl\Exception\InvariantViolationException;

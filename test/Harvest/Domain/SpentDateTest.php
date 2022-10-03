@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace CrowdfoxTimeSyncTest\Harvest\Domain;
+namespace TimeSyncTest\Harvest\Domain;
 
-use CrowdfoxTimeSync\Harvest\Domain\SpentDate;
 use PHPUnit\Framework\TestCase;
 use Psl\Exception\InvariantViolationException;
+use TimeSync\Harvest\Domain\SpentDate;
 
-/** @covers \CrowdfoxTimeSync\Harvest\Domain\SpentDate */
+/** @covers \TimeSync\Harvest\Domain\SpentDate */
 final class SpentDateTest extends TestCase
 {
     public function testWillStoreDate(): void
