@@ -36,6 +36,6 @@
         "phpunit/phpunit": "^9.5.25",
         "psalm/plugin-phpunit": "^0.17.0",
         "squizlabs/php_codesniffer": "^3.7",
-        "vimeo/psalm": "^4.28"
+        "vimeo/psalm": "^4.29"
     }
 }
