@@ -118,6 +118,81 @@ JSON,
         );
     }
 
+    public function testWillFetchLogEntriesForGivenIssuesEvenIfIssueSelfUrlIsNotContainingTheIssueId(): void
+    {
+        $response = $this->responseFactory->createResponse();
+
+        $response->getBody()
+            ->write(
+                <<<'JSON'
+{
+  "results": [
+    {
+      "tempoWorklogId": 123,
+      "issue": {
+        "self": "https://foo.atlassian.net/rest/api/2/issue/12345",
+        "id": 12345
+      },
+      "timeSpentSeconds": 61,
+      "billableSeconds": 60,
+      "startDate": "2022-08-09",
+      "startTime": "00:00:00",
+      "description": "Working on issue AB-12 harvest:11111"
+    },
+    {
+      "tempoWorklogId": 456,
+      "issue": {
+        "self": "https://foo.atlassian.net/rest/api/2/issue/12346",
+        "id": 12346
+      },
+      "timeSpentSeconds": 64,
+      "billableSeconds": 63,
+      "startDate": "2022-08-09",
+      "startTime": "00:00:00",
+      "description": "Working on issue AB-13 harvest:11111"
+    },
+    {
+      "tempoWorklogId": 789,
+      "issue": {
+        "self": "https://foo.atlassian.net/rest/api/2/issue/12347",
+        "id": 12347
+      },
+      "timeSpentSeconds": 64,
+      "billableSeconds": 63,
+      "startDate": "2022-08-09",
+      "startTime": "00:00:00",
+      "description": "This log will be ignored, because it doesn't match the input time entry harvest:12345"
+    },
+    {
+      "tempoWorklogId": 101112,
+      "issue": {
+        "self": "https://foo.atlassian.net/rest/api/2/issue/12348",
+        "id": 12348
+      },
+      "timeSpentSeconds": 64,
+      "billableSeconds": 63,
+      "startDate": "2022-08-09",
+      "startTime": "00:00:00",
+      "description": "This log will be ignored, because it doesn't have an associated harvest id"
+    }
+  ]
+}
+JSON,
+            );
+
+        $this->httpClient->expects(self::once())
+            ->method('sendRequest')
+            ->willReturn($response);
+
+        self::assertEquals(
+            [
+                new LogEntry(new JiraIssueId('AB-12'), 'Working on issue AB-12 harvest:11111', 61, new SpentDate('2022-08-09')),
+                new LogEntry(new JiraIssueId('AB-13'), 'Working on issue AB-13 harvest:11111', 64, new SpentDate('2022-08-09')),
+            ],
+            ($this->getEntries)(new TimeEntry('11111', 10.0, 'AB1-2, AB1-3, hello', new SpentDate('2022-08-09'))),
+        );
+    }
+
     public function testWillRejectNon200HttpResponses(): void
     {
         $response = $this->responseFactory->createResponse(201);
