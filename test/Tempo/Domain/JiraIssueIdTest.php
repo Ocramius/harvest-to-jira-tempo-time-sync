@@ -72,6 +72,22 @@ final class JiraIssueIdTest extends TestCase
         self::assertSame($id, JiraIssueId::fromSelfUrl($url)->id);
     }
 
+    /**
+     * @param non-empty-string $expectedId
+     *
+     * @dataProvider validSelfUrlsAndDescriptions
+     */
+    public function testFromValidSelfUrlOrDescription(
+        string $url,
+        string $description,
+        string $expectedId,
+    ): void {
+        $id = JiraIssueId::fromSelfUrlOrDescription($url, $description);
+
+        self::assertNotNull($id);
+        self::assertSame($expectedId, $id->id);
+    }
+
     /** @return non-empty-list<array{non-empty-string, non-empty-string}> */
     public function validSelfUrls(): array
     {
@@ -79,6 +95,17 @@ final class JiraIssueIdTest extends TestCase
             ['/A-1', 'A-1'],
             ['http://example.com/A-2', 'A-2'],
             ['https://foo.atlassian.net/rest/api/2/issue/AB-123', 'AB-123'],
+        ];
+    }
+
+    /** @return non-empty-list<array{string, string, non-empty-string}> */
+    public function validSelfUrlsAndDescriptions(): array
+    {
+        return [
+            ['/A-1', 'A-1', 'A-1'],
+            ['/', 'A-1', 'A-1'],
+            ['/', 'I worked on A-1 during the night', 'A-1'],
+            ['/', 'i worked on AA-11 during the night', 'AA-11'],
         ];
     }
 
@@ -122,6 +149,49 @@ final class JiraIssueIdTest extends TestCase
             [
                 'https://foo.atlassian.net/rest/api/2/issue/123',
                 'Url "https://foo.atlassian.net/rest/api/2/issue/123" does not contain a Jira issue ID',
+            ],
+        ];
+    }
+
+    /**
+     * @param non-empty-string $expectedExceptionMessage
+     *
+     * @dataProvider invalidSelfUrlsAndDescriptions
+     */
+    public function testFromInvalidSelfUrlOrDescription(
+        string $url,
+        string $description,
+    ): void {
+        self::assertNull(JiraIssueId::fromSelfUrlOrDescription($url, $description));
+    }
+
+    /** @return non-empty-list<array{string, string}> */
+    public function invalidSelfUrlsAndDescriptions(): array
+    {
+        return [
+            [
+                '',
+                '',
+            ],
+            [
+                '/A-',
+                'FOO-',
+            ],
+            [
+                'http://example.com/FOO',
+                ' FOO - BAR',
+            ],
+            [
+                'http://example.com/FOO',
+                ' FOO - 123',
+            ],
+            [
+                'http://example.com/FOO',
+                ' FOO- 123',
+            ],
+            [
+                'http://example.com/FOO',
+                ' FOO -123',
             ],
         ];
     }
