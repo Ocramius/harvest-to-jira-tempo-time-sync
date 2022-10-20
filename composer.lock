@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "75d5a54207066152b1d89a265b141790",
+    "content-hash": "b92ea4197be88642cf560730dc65e1fb",
     "packages": [
         {
             "name": "azjezz/psl",
@@ -148,22 +148,22 @@
         },
         {
             "name": "cuyz/valinor",
-            "version": "0.15.0",
+            "version": "0.16.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/CuyZ/Valinor.git",
-                "reference": "0d2205edd332b6aa908cabe6dbfd22a091dcd70c"
+                "reference": "027d2a43daa66d37c3792369d5520dd6c5498723"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CuyZ/Valinor/zipball/0d2205edd332b6aa908cabe6dbfd22a091dcd70c",
-                "reference": "0d2205edd332b6aa908cabe6dbfd22a091dcd70c",
+                "url": "https://api.github.com/repos/CuyZ/Valinor/zipball/027d2a43daa66d37c3792369d5520dd6c5498723",
+                "reference": "027d2a43daa66d37c3792369d5520dd6c5498723",
                 "shasum": ""
             },
             "require": {
                 "composer-runtime-api": "^2.0",
                 "doctrine/annotations": "^1.11",
-                "php": "~7.4.0 || ~8.0.0 || ~8.1.0",
+                "php": "~7.4.0 || ~8.0.0 || ~8.1.0 || ~8.2.0",
                 "psr/simple-cache": "^1.0 || ^2.0"
             },
             "require-dev": {
@@ -210,9 +210,9 @@
             ],
             "support": {
                 "issues": "https://github.com/CuyZ/Valinor/issues",
-                "source": "https://github.com/CuyZ/Valinor/tree/0.15.0"
+                "source": "https://github.com/CuyZ/Valinor/tree/0.16.0"
             },
-            "time": "2022-10-06T11:49:08+00:00"
+            "time": "2022-10-19T11:46:57+00:00"
         },
         {
             "name": "doctrine/annotations",
