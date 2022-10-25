@@ -23,7 +23,7 @@
         "ext-bcmath": "*",
         "azjezz/psl": "^2.0.4",
         "cuyz/valinor": "^0.16.0",
-        "laminas/laminas-diactoros": "^2.19",
+        "laminas/laminas-diactoros": "^2.20",
         "php-http/curl-client": "^2.2",
         "php-http/discovery": "^1.14",
         "php-http/httplug": "^2.3.0",
