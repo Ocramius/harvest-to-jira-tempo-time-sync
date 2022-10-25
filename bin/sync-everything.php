@@ -12,8 +12,8 @@ use Psl;
 use TimeSync\Harvest\Infrastructure\GetTimeEntriesFromV2Api;
 use TimeSync\SyncHarvestToTempo\Domain\SendHarvestEntryToTempo;
 use TimeSync\Tempo\Domain\JiraIssueId;
-use TimeSync\Tempo\Infrastructure\AddWorkLogEntryViaTempoV4Api;
-use TimeSync\Tempo\Infrastructure\GetWorkLogEntriesViaTempoV4Api;
+use TimeSync\Tempo\Infrastructure\AddWorkLogEntryViaTempoV3Api;
+use TimeSync\Tempo\Infrastructure\GetWorkLogEntriesViaTempoV3Api;
 
 (static function (): void {
     require_once __DIR__ . '/../vendor/autoload.php';
@@ -33,13 +33,13 @@ use TimeSync\Tempo\Infrastructure\GetWorkLogEntriesViaTempoV4Api;
 
     $syncEntry = new SendHarvestEntryToTempo(
         $fallbackJiraIssue,
-        new GetWorkLogEntriesViaTempoV4Api(
+        new GetWorkLogEntriesViaTempoV3Api(
             $httpClient,
             $requestFactory,
             $secrets['TEMPO_ACCESS_TOKEN'],
             $fallbackJiraIssue,
         ),
-        new AddWorkLogEntryViaTempoV4Api(
+        new AddWorkLogEntryViaTempoV3Api(
             $httpClient,
             $requestFactory,
             $secrets['TEMPO_ACCESS_TOKEN'],
