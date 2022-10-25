@@ -15,15 +15,15 @@ use TimeSync\Harvest\Domain\SpentDate;
 use TimeSync\Harvest\Domain\TimeEntry;
 use TimeSync\Tempo\Domain\JiraIssueId;
 use TimeSync\Tempo\Domain\LogEntry;
-use TimeSync\Tempo\Infrastructure\GetWorkLogEntriesViaTempoV4Api;
+use TimeSync\Tempo\Infrastructure\GetWorkLogEntriesViaTempoV3Api;
 
-/** @covers \TimeSync\Tempo\Infrastructure\GetWorkLogEntriesViaTempoV4Api */
-final class GetWorkLogEntriesViaTempoV4ApiTest extends TestCase
+/** @covers \TimeSync\Tempo\Infrastructure\GetWorkLogEntriesViaTempoV3Api */
+final class GetWorkLogEntriesViaTempoV3ApiTest extends TestCase
 {
     /** @var ClientInterface&MockObject */
     private ClientInterface $httpClient;
     private ResponseFactoryInterface $responseFactory;
-    private GetWorkLogEntriesViaTempoV4Api $getEntries;
+    private GetWorkLogEntriesViaTempoV3Api $getEntries;
 
     protected function setUp(): void
     {
@@ -31,7 +31,7 @@ final class GetWorkLogEntriesViaTempoV4ApiTest extends TestCase
 
         $this->httpClient      = $this->createMock(ClientInterface::class);
         $this->responseFactory = Psr17FactoryDiscovery::findResponseFactory();
-        $this->getEntries      = new GetWorkLogEntriesViaTempoV4Api(
+        $this->getEntries      = new GetWorkLogEntriesViaTempoV3Api(
             $this->httpClient,
             Psr17FactoryDiscovery::findRequestFactory(),
             'abc123',
@@ -94,7 +94,7 @@ JSON,
             ->with(self::callback(static function (RequestInterface $request): bool {
                 self::assertSame('GET', $request->getMethod());
                 self::assertSame(
-                    'https://api.tempo.io/4/worklogs?issue=AB1-2&issue=AB1-3&issue=FALLBACK-123&from=2022-08-09&to=2022-08-09&limit=1000',
+                    'https://api.tempo.io/core/3/worklogs?issue=AB1-2&issue=AB1-3&issue=FALLBACK-123&from=2022-08-09&to=2022-08-09&limit=1000',
                     $request->getUri()->__toString(),
                 );
                 self::assertSame(
@@ -197,12 +197,15 @@ JSON,
     {
         $response = $this->responseFactory->createResponse(201);
 
+        $response->getBody()
+            ->write('HEHE!');
+
         $this->httpClient->expects(self::once())
             ->method('sendRequest')
             ->willReturn($response);
 
         $this->expectException(InvariantViolationException::class);
-        $this->expectExceptionMessage('Request https://api.tempo.io/4/worklogs?issue=AB1-2&issue=AB1-3&issue=FALLBACK-123&from=2022-08-09&to=2022-08-09&limit=1000  not successful: 201');
+        $this->expectExceptionMessage("Request https://api.tempo.io/core/3/worklogs?issue=AB1-2&issue=AB1-3&issue=FALLBACK-123&from=2022-08-09&to=2022-08-09&limit=1000  not successful: 201\nHEHE!");
 
         ($this->getEntries)(new TimeEntry('123', 10.0, 'AB1-2, AB1-3, hello', new SpentDate('2022-08-09')));
     }

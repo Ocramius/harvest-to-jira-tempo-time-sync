@@ -10,7 +10,8 @@ use Psr\Http\Message\RequestFactoryInterface;
 use TimeSync\Tempo\Domain\LogEntry;
 use TimeSync\Tempo\Domain\SetWorkLogEntry;
 
-final class AddWorkLogEntryViaTempoV4Api implements SetWorkLogEntry
+/** @link https://apidocs.tempo.io/#worklogs */
+final class AddWorkLogEntryViaTempoV3Api implements SetWorkLogEntry
 {
     /**
      * @param non-empty-string $tempoBearerToken
@@ -27,7 +28,7 @@ final class AddWorkLogEntryViaTempoV4Api implements SetWorkLogEntry
     public function __invoke(LogEntry $logEntry): void
     {
         $request = $this->makeRequest
-            ->createRequest('POST', 'https://api.tempo.io/4/worklogs')
+            ->createRequest('POST', 'https://api.tempo.io/core/3/worklogs')
             ->withHeader('Authorization', 'Bearer ' . $this->tempoBearerToken)
             ->withHeader('Content-Type', 'application/json')
             ->withHeader('Accept', 'application/json');
@@ -48,7 +49,8 @@ final class AddWorkLogEntryViaTempoV4Api implements SetWorkLogEntry
             $response->getStatusCode() === 200,
             'Request '
             . $request->getMethod() . ' ' . $request->getUri()->__toString()
-            . '  not successful: ' . $response->getStatusCode(),
+            . '  not successful: ' . $response->getStatusCode()
+            . "\n" . $response->getBody()->__toString(),
         );
     }
 }

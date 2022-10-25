@@ -19,7 +19,7 @@ use function array_values;
 use function implode;
 
 /** @link https://apidocs.tempo.io/v4/#section/API-conventions */
-final class GetWorkLogEntriesViaTempoV4Api implements GetWorkLogEntries
+final class GetWorkLogEntriesViaTempoV3Api implements GetWorkLogEntries
 {
     /**
      * @param non-empty-string $harvestAccountId
@@ -52,7 +52,7 @@ final class GetWorkLogEntriesViaTempoV4Api implements GetWorkLogEntries
             . '&limit=1000';
 
         $request = $this->makeRequest
-            ->createRequest('GET', 'https://api.tempo.io/4/worklogs');
+            ->createRequest('GET', 'https://api.tempo.io/core/3/worklogs');
 
         $request = $request
             ->withUri(
@@ -66,7 +66,9 @@ final class GetWorkLogEntriesViaTempoV4Api implements GetWorkLogEntries
 
         Psl\invariant(
             $response->getStatusCode() === 200,
-            'Request ' . $request->getUri()->__toString() . '  not successful: ' . $response->getStatusCode(),
+            'Request ' . $request->getUri()->__toString()
+            . '  not successful: ' . $response->getStatusCode()
+            . "\n" . $response->getBody()->__toString(),
         );
 
         $logEntries = array_filter(array_map(

@@ -14,15 +14,15 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use TimeSync\Harvest\Domain\SpentDate;
 use TimeSync\Tempo\Domain\JiraIssueId;
 use TimeSync\Tempo\Domain\LogEntry;
-use TimeSync\Tempo\Infrastructure\AddWorkLogEntryViaTempoV4Api;
+use TimeSync\Tempo\Infrastructure\AddWorkLogEntryViaTempoV3Api;
 
-/** @covers \TimeSync\Tempo\Infrastructure\AddWorkLogEntryViaTempoV4Api */
-final class AddWorkLogEntriesViaTempoV4ApiTest extends TestCase
+/** @covers \TimeSync\Tempo\Infrastructure\AddWorkLogEntryViaTempoV3Api */
+final class AddWorkLogEntriesViaTempoV3ApiTest extends TestCase
 {
     /** @var ClientInterface&MockObject */
     private ClientInterface $httpClient;
     private ResponseFactoryInterface $responseFactory;
-    private AddWorkLogEntryViaTempoV4Api $addEntry;
+    private AddWorkLogEntryViaTempoV3Api $addEntry;
 
     protected function setUp(): void
     {
@@ -30,7 +30,7 @@ final class AddWorkLogEntriesViaTempoV4ApiTest extends TestCase
 
         $this->httpClient      = $this->createMock(ClientInterface::class);
         $this->responseFactory = Psr17FactoryDiscovery::findResponseFactory();
-        $this->addEntry        = new AddWorkLogEntryViaTempoV4Api(
+        $this->addEntry        = new AddWorkLogEntryViaTempoV3Api(
             $this->httpClient,
             Psr17FactoryDiscovery::findRequestFactory(),
             'abc123',
@@ -47,7 +47,7 @@ final class AddWorkLogEntriesViaTempoV4ApiTest extends TestCase
             ->with(self::callback(static function (RequestInterface $request): bool {
                 self::assertSame('POST', $request->getMethod());
                 self::assertSame(
-                    'https://api.tempo.io/4/worklogs',
+                    'https://api.tempo.io/core/3/worklogs',
                     $request->getUri()->__toString(),
                 );
                 self::assertSame(
@@ -91,12 +91,15 @@ JSON
     {
         $response = $this->responseFactory->createResponse(201);
 
+        $response->getBody()
+            ->write('HAHA!');
+
         $this->httpClient->expects(self::once())
             ->method('sendRequest')
             ->willReturn($response);
 
         $this->expectException(InvariantViolationException::class);
-        $this->expectExceptionMessage('Request POST https://api.tempo.io/4/worklogs  not successful: 201');
+        $this->expectExceptionMessage("Request POST https://api.tempo.io/core/3/worklogs  not successful: 201\nHAHA!");
 
         ($this->addEntry)(new LogEntry(
             new JiraIssueId('AB-12'),
