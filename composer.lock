@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "76d6af228bd36af3ddc2640ceec2b3ce",
+    "content-hash": "e8aa30649a37ec49b26a93a5a0b12f7d",
     "packages": [
         {
             "name": "azjezz/psl",
@@ -148,16 +148,16 @@
         },
         {
             "name": "cuyz/valinor",
-            "version": "0.16.0",
+            "version": "0.17.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/CuyZ/Valinor.git",
-                "reference": "027d2a43daa66d37c3792369d5520dd6c5498723"
+                "reference": "db34f8852219473fa24f6354393a75816c755201"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CuyZ/Valinor/zipball/027d2a43daa66d37c3792369d5520dd6c5498723",
-                "reference": "027d2a43daa66d37c3792369d5520dd6c5498723",
+                "url": "https://api.github.com/repos/CuyZ/Valinor/zipball/db34f8852219473fa24f6354393a75816c755201",
+                "reference": "db34f8852219473fa24f6354393a75816c755201",
                 "shasum": ""
             },
             "require": {
@@ -210,9 +210,9 @@
             ],
             "support": {
                 "issues": "https://github.com/CuyZ/Valinor/issues",
-                "source": "https://github.com/CuyZ/Valinor/tree/0.16.0"
+                "source": "https://github.com/CuyZ/Valinor/tree/0.17.0"
             },
-            "time": "2022-10-19T11:46:57+00:00"
+            "time": "2022-11-08T12:29:05+00:00"
         },
         {
             "name": "doctrine/annotations",
