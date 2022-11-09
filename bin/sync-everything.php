@@ -52,7 +52,8 @@ use TimeSync\Tempo\Infrastructure\GetWorkLogEntriesViaTempoV3Api;
         Psr17FactoryDiscovery::findUriFactory(),
         $requestFactory,
         (new MapperBuilder())
-            ->flexible()
+            ->enableFlexibleCasting()
+            ->allowSuperfluousKeys()
             ->mapper(),
         $secrets['HARVEST_ACCOUNT_ID'],
         $secrets['HARVEST_ACCESS_TOKEN'],
