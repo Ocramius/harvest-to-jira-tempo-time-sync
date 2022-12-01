@@ -21,7 +21,7 @@
     "require": {
         "php": "~8.1.12",
         "ext-bcmath": "*",
-        "azjezz/psl": "^2.2.0",
+        "azjezz/psl": "^2.3.0",
         "cuyz/valinor": "^1.0.0",
         "laminas/laminas-diactoros": "^2.22.0",
         "php-http/curl-client": "^2.2.1",
@@ -32,7 +32,7 @@
     },
     "require-dev": {
         "doctrine/coding-standard": "^10.0",
-        "php-standard-library/psalm-plugin": "^2.0.2",
+        "php-standard-library/psalm-plugin": "^2.1.0",
         "phpunit/phpunit": "^9.5.26",
         "psalm/plugin-phpunit": "^0.18.3",
         "squizlabs/php_codesniffer": "^3.7.1",
