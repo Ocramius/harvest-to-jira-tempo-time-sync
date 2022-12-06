@@ -32,7 +32,7 @@
     },
     "require-dev": {
         "doctrine/coding-standard": "^10.0",
-        "php-standard-library/psalm-plugin": "^2.2.0",
+        "php-standard-library/psalm-plugin": "^2.2.1",
         "phpunit/phpunit": "^9.5.26",
         "psalm/plugin-phpunit": "^0.18.4",
         "squizlabs/php_codesniffer": "^3.7.1",
