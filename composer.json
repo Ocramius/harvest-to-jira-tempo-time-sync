@@ -21,7 +21,7 @@
     "require": {
         "php": "~8.2.1",
         "ext-bcmath": "*",
-        "azjezz/psl": "^2.3.1",
+        "azjezz/psl": "^2.4.1",
         "cuyz/valinor": "^1.2.0",
         "laminas/laminas-diactoros": "^2.24.0",
         "php-http/curl-client": "^2.2.1",
