@@ -22,7 +22,7 @@ final class JiraIssueIdTest extends TestCase
     }
 
     /** @return non-empty-list<array{non-empty-string}> */
-    public function validIds(): array
+    public static function validIds(): array
     {
         return [
             ['A-1'],
@@ -47,7 +47,7 @@ final class JiraIssueIdTest extends TestCase
     }
 
     /** @return non-empty-list<array{non-empty-string, non-empty-string}> */
-    public function invalidIds(): array
+    public static function invalidIds(): array
     {
         return [
             ['A', 'Invalid Jira issue ID: "A"'],
@@ -89,7 +89,7 @@ final class JiraIssueIdTest extends TestCase
     }
 
     /** @return non-empty-list<array{non-empty-string, non-empty-string}> */
-    public function validSelfUrls(): array
+    public static function validSelfUrls(): array
     {
         return [
             ['/A-1', 'A-1'],
@@ -99,7 +99,7 @@ final class JiraIssueIdTest extends TestCase
     }
 
     /** @return non-empty-list<array{string, string, non-empty-string}> */
-    public function validSelfUrlsAndDescriptions(): array
+    public static function validSelfUrlsAndDescriptions(): array
     {
         return [
             ['/A-1', 'A-1', 'A-1'],
@@ -123,7 +123,7 @@ final class JiraIssueIdTest extends TestCase
     }
 
     /** @return non-empty-list<array{string, non-empty-string}> */
-    public function invalidSelfUrls(): array
+    public static function invalidSelfUrls(): array
     {
         return [
             [
@@ -166,7 +166,7 @@ final class JiraIssueIdTest extends TestCase
     }
 
     /** @return non-empty-list<array{string, string}> */
-    public function invalidSelfUrlsAndDescriptions(): array
+    public static function invalidSelfUrlsAndDescriptions(): array
     {
         return [
             [

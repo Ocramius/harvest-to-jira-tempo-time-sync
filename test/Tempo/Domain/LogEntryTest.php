@@ -28,7 +28,7 @@ final class LogEntryTest extends TestCase
     }
 
     /** @return non-empty-list<array{non-empty-string, non-empty-string}> */
-    public function logDescriptionsMatchingHarvestIdentifiers(): array
+    public static function logDescriptionsMatchingHarvestIdentifiers(): array
     {
         return [
             ['harvest:1', '1'],
@@ -53,7 +53,7 @@ final class LogEntryTest extends TestCase
     }
 
     /** @return non-empty-list<array{string, non-empty-string}> */
-    public function logDescriptionsNotMatchingHarvestIdentifiers(): array
+    public static function logDescriptionsNotMatchingHarvestIdentifiers(): array
     {
         return [
             ['', '1'],
@@ -96,7 +96,7 @@ final class LogEntryTest extends TestCase
     }
 
     /** @return non-empty-array<non-empty-string, array{TimeEntry, non-empty-list<LogEntry>}> */
-    public function examplesOfSplitTimeEntry(): array
+    public static function examplesOfSplitTimeEntry(): array
     {
         return [
             'time entry perfectly split in 4 existing issues' => [
@@ -199,7 +199,7 @@ final class LogEntryTest extends TestCase
     }
 
     /** @return non-empty-list<array{non-empty-string, non-empty-string, non-empty-string, non-empty-string, bool}> */
-    public function examplesOfSameAndDifferentDayAndIssue(): array
+    public static function examplesOfSameAndDifferentDayAndIssue(): array
     {
         return [
             ['AB12-123', 'AB12-123', '2022-08-01', '2022-08-01', true],
