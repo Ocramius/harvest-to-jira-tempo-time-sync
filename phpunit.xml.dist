@@ -4,7 +4,6 @@
     colors="true"
     xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
     cacheResult="false"
-    beStrictAboutCoversAnnotation="true"
 >
     <testsuites>
         <testsuite name="all">
@@ -12,7 +11,7 @@
         </testsuite>
     </testsuites>
 
-    <coverage processUncoveredFiles="true">
+    <coverage>
         <include>
             <directory suffix=".php">src</directory>
         </include>
