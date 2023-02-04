@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6948ad680947fe33a5602b0e7d647f21",
+    "content-hash": "995004aa03b2cf8196c81e82ac9cf6da",
     "packages": [
         {
             "name": "azjezz/psl",
@@ -2769,16 +2769,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "10.0.2",
+            "version": "10.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "4f49a8f379b9730d27d6c4f2b271c222b8e22476"
+                "reference": "140897d407ce1c9e0b6b5ced8663d442af7c5560"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/4f49a8f379b9730d27d6c4f2b271c222b8e22476",
-                "reference": "4f49a8f379b9730d27d6c4f2b271c222b8e22476",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/140897d407ce1c9e0b6b5ced8663d442af7c5560",
+                "reference": "140897d407ce1c9e0b6b5ced8663d442af7c5560",
                 "shasum": ""
             },
             "require": {
@@ -2849,7 +2849,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.0.2"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.0.3"
             },
             "funding": [
                 {
@@ -2865,7 +2865,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-02-04T07:03:02+00:00"
+            "time": "2023-02-04T13:39:07+00:00"
         },
         {
             "name": "psalm/plugin-phpunit",
