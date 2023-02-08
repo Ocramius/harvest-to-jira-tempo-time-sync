@@ -15,6 +15,7 @@ use TimeSync\Tempo\Domain\LogEntry;
 
 use function array_filter;
 use function array_map;
+use function array_unique;
 use function array_values;
 use function implode;
 
@@ -42,10 +43,10 @@ final class GetWorkLogEntriesViaTempoV3Api implements GetWorkLogEntries
          */
         $query = implode(
             '&',
-            array_map(
+            array_unique(array_map(
                 static fn (LogEntry $entry): string => 'issue=' . $entry->issue->id,
                 LogEntry::splitTimeEntry($timeEntry, $this->fallbackJiraIssue),
-            ),
+            )),
         )
             . '&from=' . $timeEntry->spent_date->toString()
             . '&to=' . $timeEntry->spent_date->toString()
