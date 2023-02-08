@@ -209,4 +209,56 @@ JSON,
 
         ($this->getEntries)(new TimeEntry('123', 10.0, 'AB1-2, AB1-3, hello', new SpentDate('2022-08-09')));
     }
+
+    /**
+     * @group #39
+     *
+     * Tempo started rejecting `/core/3/worklogs?issue=id&issue=id` queries when
+     * the `id` is the same: that kind of query now leads to a 404 error.
+     *
+     * In order to avoid this problem, we de-duplicate any queried issue IDs before
+     * adding them to the outgoing query string.
+     */
+    public function testWillDeDuplicateJiraIssueIdsBeforeQuerying(): void
+    {
+        $response = $this->responseFactory->createResponse();
+
+        $response->getBody()
+            ->write(
+                <<<'JSON'
+{
+  "results": []
+}
+JSON,
+            );
+
+        $this->httpClient->expects(self::once())
+            ->method('sendRequest')
+            ->with(self::callback(static function (RequestInterface $request): bool {
+                self::assertSame('GET', $request->getMethod());
+                self::assertSame(
+                    'https://api.tempo.io/core/3/worklogs?issue=AB1-2&issue=AB1-3&issue=FALLBACK-123&from=2022-08-09&to=2022-08-09&limit=1000',
+                    $request->getUri()->__toString(),
+                );
+                self::assertSame(
+                    [
+                        'Host'                => ['api.tempo.io'],
+                        'Authorization'       => ['Bearer abc123'],
+                    ],
+                    $request->getHeaders(),
+                );
+
+                return true;
+            }))
+            ->willReturn($response);
+
+        self::assertEmpty(
+            ($this->getEntries)(new TimeEntry(
+                '11111',
+                10.0,
+                'AB1-2, AB1-2, AB1-3, AB1-2, AB1-3, hello, hi',
+                new SpentDate('2022-08-09'),
+            )),
+        );
+    }
 }
