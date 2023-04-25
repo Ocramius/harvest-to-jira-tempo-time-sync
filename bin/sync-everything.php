@@ -27,9 +27,9 @@ use TimeSync\Tempo\Infrastructure\GetWorkLogEntriesViaTempoV3Api;
         'HARVEST_PROJECT_ID'     => Psl\Type\non_empty_string(),
     ])->coerce(Psl\Env\get_vars());
 
-    $fallbackJiraIssue = new JiraIssueId($secrets['FALLBACK_JIRA_ISSUE_ID']);
     /** @psalm-suppress DeprecatedInterface we rely on the parent HTTP client interface anyway */
     $httpClient        = HttpClientDiscovery::find();
+    $fallbackJiraIssue = new JiraIssueId($secrets['FALLBACK_JIRA_ISSUE_ID']);
     $requestFactory    = Psr17FactoryDiscovery::findRequestFactory();
 
     $syncEntry = new SendHarvestEntryToTempo(

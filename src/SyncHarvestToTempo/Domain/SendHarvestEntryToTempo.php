@@ -32,7 +32,7 @@ final class SendHarvestEntryToTempo
                 static fn (LogEntry $entry): bool => ! Psl\Iter\any(
                     $existingEntries,
                     // Note: following should be `$entry->appliesToSameIssueAndDay(...)`, but psalm can't follow
-                    fn (LogEntry $other): bool => $entry->appliesToSameIssueAndDay($other),
+                    static fn (LogEntry $other): bool => $entry->appliesToSameIssueAndDay($other),
                 )
             ),
             $this->setWorkLogEntry->__invoke(...),
