@@ -153,11 +153,7 @@ final class JiraIssueIdTest extends TestCase
         ];
     }
 
-    /**
-     * @param non-empty-string $expectedExceptionMessage
-     *
-     * @dataProvider invalidSelfUrlsAndDescriptions
-     */
+    /** @dataProvider invalidSelfUrlsAndDescriptions */
     public function testFromInvalidSelfUrlOrDescription(
         string $url,
         string $description,

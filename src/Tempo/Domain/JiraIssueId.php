@@ -10,11 +10,7 @@ use Psl\Exception\InvariantViolationException;
 /** @psalm-immutable */
 final class JiraIssueId
 {
-    /**
-     * @param non-empty-string $notes
-     *
-     * @throws InvariantViolationException on negative input hours.
-     */
+    /** @throws InvariantViolationException on negative input hours. */
     public function __construct(
         public readonly string $id,
     ) {

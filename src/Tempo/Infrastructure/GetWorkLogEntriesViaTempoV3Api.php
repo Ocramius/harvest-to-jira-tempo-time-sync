@@ -22,10 +22,7 @@ use function implode;
 /** @link https://apidocs.tempo.io/v4/#section/API-conventions */
 final class GetWorkLogEntriesViaTempoV3Api implements GetWorkLogEntries
 {
-    /**
-     * @param non-empty-string $harvestAccountId
-     * @param non-empty-string $tempoBearerToken
-     */
+    /** @param non-empty-string $tempoBearerToken */
     public function __construct(
         private readonly ClientInterface $httpClient,
         private readonly RequestFactoryInterface $makeRequest,
