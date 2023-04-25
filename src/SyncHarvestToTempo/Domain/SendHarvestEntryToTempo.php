@@ -31,7 +31,8 @@ final class SendHarvestEntryToTempo
                 LogEntry::splitTimeEntry($time, $this->fallbackJiraIssue),
                 static fn (LogEntry $entry): bool => ! Psl\Iter\any(
                     $existingEntries,
-                    $entry->appliesToSameIssueAndDay(...),
+                    // Note: following should be `$entry->appliesToSameIssueAndDay(...)`, but psalm can't follow
+                    fn (LogEntry $other): bool => $entry->appliesToSameIssueAndDay($other),
                 )
             ),
             $this->setWorkLogEntry->__invoke(...),

@@ -28,6 +28,7 @@ use TimeSync\Tempo\Infrastructure\GetWorkLogEntriesViaTempoV3Api;
     ])->coerce(Psl\Env\get_vars());
 
     $fallbackJiraIssue = new JiraIssueId($secrets['FALLBACK_JIRA_ISSUE_ID']);
+    /** @psalm-suppress DeprecatedInterface we rely on the parent HTTP client interface anyway */
     $httpClient        = HttpClientDiscovery::find();
     $requestFactory    = Psr17FactoryDiscovery::findRequestFactory();
 
