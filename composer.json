@@ -26,7 +26,7 @@
         "cuyz/valinor": "^1.4.0",
         "laminas/laminas-diactoros": "^2.25.2",
         "php-http/curl-client": "^2.2.1",
-        "php-http/discovery": "^1.15.3",
+        "php-http/discovery": "^1.17.0",
         "php-http/httplug": "^2.4.0",
         "psr/http-client": "^1.0.2",
         "psr/http-factory": "^1.0.2"
