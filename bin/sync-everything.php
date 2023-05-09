@@ -6,8 +6,8 @@ declare(strict_types=1);
 namespace TimeSync\Bin;
 
 use CuyZ\Valinor\MapperBuilder;
-use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\Psr17FactoryDiscovery;
+use Http\Discovery\Psr18ClientDiscovery;
 use Psl;
 use TimeSync\Harvest\Infrastructure\GetTimeEntriesFromV2Api;
 use TimeSync\SyncHarvestToTempo\Domain\SendHarvestEntryToTempo;
@@ -27,8 +27,7 @@ use TimeSync\Tempo\Infrastructure\GetWorkLogEntriesViaTempoV3Api;
         'HARVEST_PROJECT_ID'     => Psl\Type\non_empty_string(),
     ])->coerce(Psl\Env\get_vars());
 
-    /** @psalm-suppress DeprecatedInterface we rely on the parent HTTP client interface anyway */
-    $httpClient        = HttpClientDiscovery::find();
+    $httpClient        = Psr18ClientDiscovery::find();
     $fallbackJiraIssue = new JiraIssueId($secrets['FALLBACK_JIRA_ISSUE_ID']);
     $requestFactory    = Psr17FactoryDiscovery::findRequestFactory();
 
