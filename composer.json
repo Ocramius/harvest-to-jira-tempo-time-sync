@@ -20,7 +20,7 @@
         }
     },
     "require": {
-        "php": "~8.2.5",
+        "php": "~8.2.4",
         "ext-bcmath": "*",
         "azjezz/psl": "^2.5.0",
         "cuyz/valinor": "^1.4.0",
