@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "15eb397628f4aeaf032650c05c3b984c",
+    "content-hash": "bcd245b3a9a2676994c1868918b70a7b",
     "packages": [
         {
             "name": "azjezz/psl",
-            "version": "2.5.0",
+            "version": "2.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/azjezz/psl.git",
-                "reference": "0b1eac31dfb86209043397d6f86271faa3db87ee"
+                "reference": "97341582b555c18ac9f46f7958fda47358f2190a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/azjezz/psl/zipball/0b1eac31dfb86209043397d6f86271faa3db87ee",
-                "reference": "0b1eac31dfb86209043397d6f86271faa3db87ee",
+                "url": "https://api.github.com/repos/azjezz/psl/zipball/97341582b555c18ac9f46f7958fda47358f2190a",
+                "reference": "97341582b555c18ac9f46f7958fda47358f2190a",
                 "shasum": ""
             },
             "require": {
@@ -70,7 +70,7 @@
             "description": "PHP Standard Library",
             "support": {
                 "issues": "https://github.com/azjezz/psl/issues",
-                "source": "https://github.com/azjezz/psl/tree/2.5.0"
+                "source": "https://github.com/azjezz/psl/tree/2.6.0"
             },
             "funding": [
                 {
@@ -78,7 +78,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2023-03-17T11:52:46+00:00"
+            "time": "2023-05-18T10:12:44+00:00"
         },
         {
             "name": "clue/stream-filter",
