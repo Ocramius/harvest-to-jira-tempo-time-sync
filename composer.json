@@ -22,7 +22,7 @@
     "require": {
         "php": "~8.2.4",
         "ext-bcmath": "*",
-        "azjezz/psl": "^2.6.0",
+        "azjezz/psl": "^2.7.0",
         "cuyz/valinor": "^1.4.0",
         "laminas/laminas-diactoros": "^3.0.0",
         "php-http/curl-client": "^2.3.0",
