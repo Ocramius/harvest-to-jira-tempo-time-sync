@@ -35,6 +35,10 @@ final class AddWorkLogEntriesViaTempoV3ApiTest extends TestCase
             Psr17FactoryDiscovery::findRequestFactory(),
             'abc123',
             'jiraid123',
+            [
+                'custom_attribute_1' => 'custom_value_1',
+                'custom_attribute_2' => 'custom_value_2',
+            ],
         );
     }
 
@@ -66,7 +70,17 @@ final class AddWorkLogEntriesViaTempoV3ApiTest extends TestCase
   "description": "Working on issue foo",
   "issueKey": "AB-12",
   "startDate": "2022-08-09",
-  "timeSpentSeconds": 61
+  "timeSpentSeconds": 61,
+  "attributes": [
+    {
+      "key":  "custom_attribute_1",
+      "value": "custom_value_1"
+    },
+    {
+      "key":  "custom_attribute_2",
+      "value": "custom_value_2"
+   }
+  ]
 }
 JSON
                     ,
