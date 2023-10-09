@@ -92,7 +92,10 @@ final class GetTimeEntriesFromV2Api implements GetTimeEntries
                 'GET',
                 $uri
                 ?? $this->uriFactory->createUri('https://api.harvestapp.com/v2/time_entries')
-                ->withQuery(http_build_query(['project_id' => $projectId])),
+                ->withQuery(http_build_query([
+                    'project_id' => $projectId,
+                    'is_billed'  => 'false',
+                ])),
             )
             ->withAddedHeader('Harvest-Account-Id', $this->harvestAccountId)
             ->withAddedHeader('Authorization', 'Bearer ' . $this->harvestBearerToken)
