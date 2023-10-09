@@ -38,7 +38,7 @@ final class AddWorkLogEntriesViaTempoV3ApiTest extends TestCase
             [
                 'custom_attribute_1' => 'custom_value_1',
                 'custom_attribute_2' => 'custom_value_2',
-            ]
+            ],
         );
     }
 

@@ -22,7 +22,7 @@ use TimeSync\Tempo\Infrastructure\GetWorkLogEntriesViaTempoV3Api;
 
     $customAttributeTypes = Type\dict(
         Type\non_empty_string(),
-        Type\string()
+        Type\string(),
     );
 
     $secrets = Psl\Type\shape([
@@ -58,7 +58,7 @@ use TimeSync\Tempo\Infrastructure\GetWorkLogEntriesViaTempoV3Api;
             $requestFactory,
             $secrets['TEMPO_ACCESS_TOKEN'],
             $secrets['JIRA_ACCOUNT_ID'],
-            $secrets['TEMPO_CUSTOM_WORKLOG_ATTRIBUTES'] ?? []
+            $secrets['TEMPO_CUSTOM_WORKLOG_ATTRIBUTES'] ?? [],
         ),
     );
 

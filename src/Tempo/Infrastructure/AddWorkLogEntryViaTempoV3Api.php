@@ -11,14 +11,15 @@ use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use TimeSync\Tempo\Domain\LogEntry;
 use TimeSync\Tempo\Domain\SetWorkLogEntry;
+
 use function array_values;
 
 /** @link https://apidocs.tempo.io/#worklogs */
 final class AddWorkLogEntryViaTempoV3Api implements SetWorkLogEntry
 {
     /**
-     * @param non-empty-string $tempoBearerToken
-     * @param non-empty-string $authorJiraAccountId in Jira, part of the URL in the "Personal Settings"
+     * @param non-empty-string                $tempoBearerToken
+     * @param non-empty-string                $authorJiraAccountId     in Jira, part of the URL in the "Personal Settings"
      * @param array<non-empty-string, string> $customAttributesToBeSet
      */
     public function __construct(
@@ -53,8 +54,8 @@ final class AddWorkLogEntryViaTempoV3Api implements SetWorkLogEntry
                             'key' => $key,
                             'value' => $value,
                         ];
-                    }
-                ))
+                    },
+                )),
             ]));
 
         $response = $this->httpClient->sendRequest($request);
