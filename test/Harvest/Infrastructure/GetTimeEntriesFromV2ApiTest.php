@@ -70,7 +70,7 @@ JSON,
             ->method('sendRequest')
             ->with(self::callback(static function (RequestInterface $request): bool {
                 self::assertSame(
-                    'https://api.harvestapp.com/v2/time_entries?project_id=def456',
+                    'https://api.harvestapp.com/v2/time_entries?project_id=def456&is_billed=false',
                     $request
                         ->getUri()
                         ->__toString(),
@@ -104,7 +104,7 @@ JSON,
             ->willReturn($response);
 
         $this->expectException(InvariantViolationException::class);
-        $this->expectExceptionMessage('Request https://api.harvestapp.com/v2/time_entries?project_id=def456  not successful: 201');
+        $this->expectExceptionMessage('Request https://api.harvestapp.com/v2/time_entries?project_id=def456&is_billed=false  not successful: 201');
 
         ($this->getTimeEntries)('def456');
     }
