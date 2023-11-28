@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4d7694a872706f2098c05d4040558793",
+    "content-hash": "0a088953e3e0f73e27d1c13fc16cc6e0",
     "packages": [
         {
             "name": "azjezz/psl",
@@ -2160,21 +2160,21 @@
         },
         {
             "name": "php-standard-library/psalm-plugin",
-            "version": "2.2.1",
+            "version": "2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-standard-library/psalm-plugin.git",
-                "reference": "068bc7a8fcbe53658c94d54eec65205eb7e6caae"
+                "reference": "bf6d560ae498966150bc66a42e02744b0ee242c5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-standard-library/psalm-plugin/zipball/068bc7a8fcbe53658c94d54eec65205eb7e6caae",
-                "reference": "068bc7a8fcbe53658c94d54eec65205eb7e6caae",
+                "url": "https://api.github.com/repos/php-standard-library/psalm-plugin/zipball/bf6d560ae498966150bc66a42e02744b0ee242c5",
+                "reference": "bf6d560ae498966150bc66a42e02744b0ee242c5",
                 "shasum": ""
             },
             "require": {
                 "php": "^8.1",
-                "vimeo/psalm": "^5.0"
+                "vimeo/psalm": ">=5.16"
             },
             "conflict": {
                 "azjezz/psl": "<2.0"
@@ -2208,9 +2208,9 @@
             "description": "Psalm plugin for the PHP Standard Library",
             "support": {
                 "issues": "https://github.com/php-standard-library/psalm-plugin/issues",
-                "source": "https://github.com/php-standard-library/psalm-plugin/tree/2.2.1"
+                "source": "https://github.com/php-standard-library/psalm-plugin/tree/2.3.0"
             },
-            "time": "2022-12-06T10:44:56+00:00"
+            "time": "2023-11-28T12:22:48+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
