@@ -33,7 +33,7 @@ final class SendHarvestEntryToTempo
                     $existingEntries,
                     // Note: following should be `$entry->appliesToSameIssueAndDay(...)`, but psalm can't follow
                     static fn (LogEntry $other): bool => $entry->appliesToSameIssueAndDay($other),
-                )
+                ),
             ),
             $this->setWorkLogEntry->__invoke(...),
         );
