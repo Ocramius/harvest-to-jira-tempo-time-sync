@@ -29,7 +29,7 @@
         "php-http/discovery": "^1.19.4",
         "php-http/httplug": "^2.4.0",
         "psr/http-client": "^1.0.3",
-        "psr/http-factory": "^1.0.2"
+        "psr/http-factory": "^1.1.0"
     },
     "require-dev": {
         "doctrine/coding-standard": "^12.0.0",
