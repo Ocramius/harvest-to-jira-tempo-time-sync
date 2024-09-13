@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "azjezz/psl",
-            "version": "3.0.0",
+            "version": "3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/azjezz/psl.git",
-                "reference": "d68cd6be64a1fe7355fc02669cc6fa6440294799"
+                "reference": "43eefa8584670cea5e654439979ff6a4d7c0df15"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/azjezz/psl/zipball/d68cd6be64a1fe7355fc02669cc6fa6440294799",
-                "reference": "d68cd6be64a1fe7355fc02669cc6fa6440294799",
+                "url": "https://api.github.com/repos/azjezz/psl/zipball/43eefa8584670cea5e654439979ff6a4d7c0df15",
+                "reference": "43eefa8584670cea5e654439979ff6a4d7c0df15",
                 "shasum": ""
             },
             "require": {
@@ -71,7 +71,7 @@
             "description": "PHP Standard Library",
             "support": {
                 "issues": "https://github.com/azjezz/psl/issues",
-                "source": "https://github.com/azjezz/psl/tree/3.0.0"
+                "source": "https://github.com/azjezz/psl/tree/3.0.1"
             },
             "funding": [
                 {
@@ -79,7 +79,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-09-03T14:18:44+00:00"
+            "time": "2024-09-12T05:11:16+00:00"
         },
         {
             "name": "clue/stream-filter",
