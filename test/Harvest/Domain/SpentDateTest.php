@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace TimeSyncTest\Harvest\Domain;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psl\Exception\InvariantViolationException;
 use TimeSync\Harvest\Domain\SpentDate;
 
-/** @covers \TimeSync\Harvest\Domain\SpentDate */
+#[CoversClass(SpentDate::class)]
 final class SpentDateTest extends TestCase
 {
     public function testWillStoreDate(): void

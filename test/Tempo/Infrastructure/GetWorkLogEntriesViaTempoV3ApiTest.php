@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace TimeSyncTest\Tempo\Infrastructure;
 
-use Http\Discovery\Psr17FactoryDiscovery;
+use  Http\Discovery\Psr17FactoryDiscovery;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psl\Exception\InvariantViolationException;
@@ -17,7 +19,7 @@ use TimeSync\Tempo\Domain\JiraIssueId;
 use TimeSync\Tempo\Domain\LogEntry;
 use TimeSync\Tempo\Infrastructure\GetWorkLogEntriesViaTempoV3Api;
 
-/** @covers \TimeSync\Tempo\Infrastructure\GetWorkLogEntriesViaTempoV3Api */
+#[CoversClass(GetWorkLogEntriesViaTempoV3Api::class)]
 final class GetWorkLogEntriesViaTempoV3ApiTest extends TestCase
 {
     /** @var ClientInterface&MockObject */
@@ -211,14 +213,13 @@ JSON,
     }
 
     /**
-     * @group #39
-     *
      * Tempo started rejecting `/core/3/worklogs?issue=id&issue=id` queries when
      * the `id` is the same: that kind of query now leads to a 404 error.
      *
      * In order to avoid this problem, we de-duplicate any queried issue IDs before
      * adding them to the outgoing query string.
      */
+    #[Group('#39')]
     public function testWillDeDuplicateJiraIssueIdsBeforeQuerying(): void
     {
         $response = $this->responseFactory->createResponse();

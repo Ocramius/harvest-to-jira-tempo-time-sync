@@ -6,6 +6,7 @@ namespace TimeSyncTest\Harvest\Infrastructure;
 
 use CuyZ\Valinor\MapperBuilder;
 use Http\Discovery\Psr17FactoryDiscovery;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psl\Exception\InvariantViolationException;
@@ -17,7 +18,7 @@ use TimeSync\Harvest\Domain\SpentDate;
 use TimeSync\Harvest\Domain\TimeEntry;
 use TimeSync\Harvest\Infrastructure\GetTimeEntriesFromV2Api;
 
-/** @covers \TimeSync\Harvest\Infrastructure\GetTimeEntriesFromV2Api */
+#[CoversClass(GetTimeEntriesFromV2Api::class)]
 final class GetTimeEntriesFromV2ApiTest extends TestCase
 {
     /** @var MockObject&ClientInterface */

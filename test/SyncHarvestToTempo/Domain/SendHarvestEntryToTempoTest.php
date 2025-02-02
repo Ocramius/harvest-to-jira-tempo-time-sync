@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TimeSyncTest\SyncHarvestToTempo\Domain;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use TimeSync\Harvest\Domain\SpentDate;
@@ -14,7 +15,7 @@ use TimeSync\Tempo\Domain\JiraIssueId;
 use TimeSync\Tempo\Domain\LogEntry;
 use TimeSync\Tempo\Domain\SetWorkLogEntry;
 
-/** @covers \TimeSync\SyncHarvestToTempo\Domain\SendHarvestEntryToTempo */
+#[CoversClass(SendHarvestEntryToTempo::class)]
 final class SendHarvestEntryToTempoTest extends TestCase
 {
     /** @var GetWorkLogEntries&MockObject */
