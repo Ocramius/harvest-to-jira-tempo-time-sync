@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TimeSyncTest\Tempo\Domain;
 
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psl\Exception\InvariantViolationException;
 use TimeSync\Tempo\Domain\JiraIssueId;
@@ -17,6 +18,7 @@ final class JiraIssueIdTest extends TestCase
      *
      * @dataProvider validIds
      */
+    #[DataProvider('validIds')]
     public function testValidJiraIssueId(string $id): void
     {
         self::assertSame($id, (new JiraIssueId($id))->id);
@@ -39,6 +41,7 @@ final class JiraIssueIdTest extends TestCase
      *
      * @dataProvider invalidIds
      */
+    #[DataProvider('invalidIds')]
     public function testInvalidJiraIssueId(string $id, string $expectedExceptionMessage): void
     {
         $this->expectException(InvariantViolationException::class);
@@ -68,6 +71,7 @@ final class JiraIssueIdTest extends TestCase
      *
      * @dataProvider validSelfUrls
      */
+    #[DataProvider('validSelfUrls')]
     public function testFromSelfUrl(string $url, string $id): void
     {
         self::assertSame($id, JiraIssueId::fromSelfUrl($url)->id);
@@ -78,6 +82,7 @@ final class JiraIssueIdTest extends TestCase
      *
      * @dataProvider validSelfUrlsAndDescriptions
      */
+    #[DataProvider('validSelfUrlsAndDescriptions')]
     public function testFromValidSelfUrlOrDescription(
         string $url,
         string $description,
@@ -115,6 +120,7 @@ final class JiraIssueIdTest extends TestCase
      *
      * @dataProvider invalidSelfUrls
      */
+    #[DataProvider('invalidSelfUrls')]
     public function testFromInvalidSelfUrl(string $url, string $expectedExceptionMessage): void
     {
         $this->expectException(InvariantViolationException::class);
@@ -155,6 +161,7 @@ final class JiraIssueIdTest extends TestCase
     }
 
     /** @dataProvider invalidSelfUrlsAndDescriptions */
+    #[DataProvider('invalidSelfUrlsAndDescriptions')]
     public function testFromInvalidSelfUrlOrDescription(
         string $url,
         string $description,

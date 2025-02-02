@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TimeSyncTest\Tempo\Domain;
 
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use TimeSync\Harvest\Domain\SpentDate;
 use TimeSync\Harvest\Domain\TimeEntry;
@@ -20,6 +21,7 @@ final class LogEntryTest extends TestCase
      *
      * @dataProvider logDescriptionsMatchingHarvestIdentifiers
      */
+    #[DataProvider('logDescriptionsMatchingHarvestIdentifiers')]
     public function testMatchesGivenTimeEntry(string $description, string $harvestId): void
     {
         self::assertTrue(
@@ -45,6 +47,7 @@ final class LogEntryTest extends TestCase
      *
      * @dataProvider logDescriptionsNotMatchingHarvestIdentifiers
      */
+    #[DataProvider('logDescriptionsNotMatchingHarvestIdentifiers')]
     public function testDoesNotMatchGivenTimeEntry(string $description, string $harvestId): void
     {
         self::assertFalse(
@@ -75,6 +78,7 @@ final class LogEntryTest extends TestCase
      *
      * @dataProvider logDescriptionsMatchingHarvestIdentifiers
      */
+    #[DataProvider('logDescriptionsMatchingHarvestIdentifiers')]
     public function testDoesNotMatchGivenTimeEntryIfDateDoesNotMatch(string $description, string $harvestId): void
     {
         self::assertFalse(
@@ -88,6 +92,7 @@ final class LogEntryTest extends TestCase
      *
      * @dataProvider examplesOfSplitTimeEntry
      */
+    #[DataProvider('examplesOfSplitTimeEntry')]
     public function testWillSplitATimeEntryIntoMultipleLogEntries(TimeEntry $timeEntry, array $logEntries): void
     {
         self::assertEquals(
@@ -185,6 +190,7 @@ final class LogEntryTest extends TestCase
      *
      * @dataProvider examplesOfSameAndDifferentDayAndIssue
      */
+    #[DataProvider('examplesOfSameAndDifferentDayAndIssue')]
     public function testAppliesToSameIssueAndDay(
         string $issueId1,
         string $issueId2,
