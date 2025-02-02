@@ -31,7 +31,7 @@ final class GetIssueIdFromJiraRestApiV3E2ETest extends TestCase
         try {
             $secrets = Type\shape([
                 'JIRA_BASE_URL'        => Type\non_empty_string(),
-                'JIRA_ACCOUNT_ID'        => Type\non_empty_string(),
+                'JIRA_ACCOUNT_EMAIL'        => Type\non_empty_string(),
                 'JIRA_API_TOKEN'         => Type\non_empty_string(),
                 'FALLBACK_JIRA_ISSUE_ID' => Type\non_empty_string(),
                 'EXPECTED_JIRA_ISSUE_ID' => Type\positive_int(),
@@ -47,7 +47,7 @@ final class GetIssueIdFromJiraRestApiV3E2ETest extends TestCase
             Psr18ClientDiscovery::find(),
             Psr17FactoryDiscovery::findRequestFactory(),
             $secrets['JIRA_BASE_URL'],
-            $secrets['JIRA_ACCOUNT_ID'],
+            $secrets['JIRA_ACCOUNT_EMAIL'],
             $secrets['JIRA_API_TOKEN'],
         );
     }
