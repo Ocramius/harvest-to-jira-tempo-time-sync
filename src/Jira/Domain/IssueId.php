@@ -14,7 +14,7 @@ final readonly class IssueId
     }
 
     /** @param int<1, max> $id */
-    public static function make(int $id)
+    public static function make(int $id): self
     {
         return new self($id);
     }

@@ -15,7 +15,7 @@ use TimeSync\Tempo\Domain\SetWorkLogEntry;
 use function array_values;
 
 /** @link https://apidocs.tempo.io/#worklogs */
-final class AddWorkLogEntryViaTempoV3Api implements SetWorkLogEntry
+final class AddWorkLogEntryViaTempoV4Api implements SetWorkLogEntry
 {
     /**
      * @param non-empty-string                $tempoBearerToken
@@ -44,7 +44,7 @@ final class AddWorkLogEntryViaTempoV3Api implements SetWorkLogEntry
             ->write(Json\encode([
                 'authorAccountId'  => $this->authorJiraAccountId,
                 'description'      => $logEntry->description,
-                'issueKey'         => $logEntry->issue->id,
+                'issueId'          => $logEntry->issue->id->id,
                 'startDate'        => $logEntry->date->toString(),
                 'timeSpentSeconds' => $logEntry->seconds,
                 'attributes'       => array_values(Dict\map_with_key(

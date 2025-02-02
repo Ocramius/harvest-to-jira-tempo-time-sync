@@ -13,17 +13,19 @@ use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use TimeSync\Harvest\Domain\SpentDate;
+use TimeSync\Jira\Domain\IssueId;
+use TimeSync\Jira\Domain\IssueKey;
 use TimeSync\Tempo\Domain\JiraIssueId;
 use TimeSync\Tempo\Domain\LogEntry;
-use TimeSync\Tempo\Infrastructure\AddWorkLogEntryViaTempoV3Api;
+use TimeSync\Tempo\Infrastructure\AddWorkLogEntryViaTempoV4Api;
 
-#[CoversClass(AddWorkLogEntryViaTempoV3Api::class)]
-final class AddWorkLogEntriesViaTempoV3ApiTest extends TestCase
+#[CoversClass(AddWorkLogEntryViaTempoV4Api::class)]
+final class AddWorkLogEntriesViaTempoV4ApiTest extends TestCase
 {
     /** @var ClientInterface&MockObject */
     private ClientInterface $httpClient;
     private ResponseFactoryInterface $responseFactory;
-    private AddWorkLogEntryViaTempoV3Api $addEntry;
+    private AddWorkLogEntryViaTempoV4Api $addEntry;
 
     protected function setUp(): void
     {
@@ -31,7 +33,7 @@ final class AddWorkLogEntriesViaTempoV3ApiTest extends TestCase
 
         $this->httpClient      = $this->createMock(ClientInterface::class);
         $this->responseFactory = Psr17FactoryDiscovery::findResponseFactory();
-        $this->addEntry        = new AddWorkLogEntryViaTempoV3Api(
+        $this->addEntry        = new AddWorkLogEntryViaTempoV4Api(
             $this->httpClient,
             Psr17FactoryDiscovery::findRequestFactory(),
             'abc123',
@@ -69,7 +71,7 @@ final class AddWorkLogEntriesViaTempoV3ApiTest extends TestCase
 {
   "authorAccountId": "jiraid123",
   "description": "Working on issue foo",
-  "issueKey": "AB-12",
+  "issueId": 112233,
   "startDate": "2022-08-09",
   "timeSpentSeconds": 61,
   "attributes": [
@@ -95,7 +97,7 @@ JSON
             ->willReturn($response);
 
         ($this->addEntry)(new LogEntry(
-            new JiraIssueId('AB-12'),
+            new JiraIssueId(IssueId::make(112233), IssueKey::make('AB-12')),
             'Working on issue foo',
             61,
             new SpentDate('2022-08-09'),
@@ -117,7 +119,7 @@ JSON
         $this->expectExceptionMessage("Request POST https://api.tempo.io/core/3/worklogs  not successful: 201\nHAHA!");
 
         ($this->addEntry)(new LogEntry(
-            new JiraIssueId('AB-12'),
+            new JiraIssueId(IssueId::make(112233), IssueKey::make('AB-12')),
             'Working on issue foo',
             61,
             new SpentDate('2022-08-09'),

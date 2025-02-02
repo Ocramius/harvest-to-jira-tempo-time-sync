@@ -6,6 +6,7 @@ namespace TimeSync\SyncHarvestToTempo\Domain;
 
 use Psl;
 use TimeSync\Harvest\Domain\TimeEntry;
+use TimeSync\Jira\Domain\GetIssueIdForKey;
 use TimeSync\Tempo\Domain\GetWorkLogEntries;
 use TimeSync\Tempo\Domain\JiraIssueId;
 use TimeSync\Tempo\Domain\LogEntry;
@@ -13,12 +14,13 @@ use TimeSync\Tempo\Domain\SetWorkLogEntry;
 
 use function array_filter;
 
-final class SendHarvestEntryToTempo
+final readonly class SendHarvestEntryToTempo
 {
     public function __construct(
-        private readonly JiraIssueId $fallbackJiraIssue,
-        private readonly GetWorkLogEntries $getWorkLogEntries,
-        private readonly SetWorkLogEntry $setWorkLogEntry,
+        private GetIssueIdForKey $getId,
+        private JiraIssueId $fallbackJiraIssue,
+        private GetWorkLogEntries $getWorkLogEntries,
+        private SetWorkLogEntry $setWorkLogEntry,
     ) {
     }
 
@@ -28,7 +30,7 @@ final class SendHarvestEntryToTempo
 
         Psl\Iter\apply(
             array_filter(
-                LogEntry::splitTimeEntry($time, $this->fallbackJiraIssue),
+                LogEntry::splitTimeEntry($this->getId, $time, $this->fallbackJiraIssue),
                 static fn (LogEntry $entry): bool => ! Psl\Iter\any(
                     $existingEntries,
                     // Note: following should be `$entry->appliesToSameIssueAndDay(...)`, but psalm can't follow

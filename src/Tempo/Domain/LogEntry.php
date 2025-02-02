@@ -7,6 +7,8 @@ namespace TimeSync\Tempo\Domain;
 use Psl;
 use TimeSync\Harvest\Domain\SpentDate;
 use TimeSync\Harvest\Domain\TimeEntry;
+use TimeSync\Jira\Domain\GetIssueIdForKey;
+use TimeSync\Jira\Domain\IssueKey;
 
 use function array_keys;
 use function array_map;
@@ -28,8 +30,11 @@ final class LogEntry
     }
 
     /** @return non-empty-list<self> */
-    public static function splitTimeEntry(TimeEntry $entry, JiraIssueId $fallbackIssue): array
-    {
+    public static function splitTimeEntry(
+        GetIssueIdForKey $getIssueIdForKey,
+        TimeEntry $entry,
+        JiraIssueId $fallbackIssue,
+    ): array {
         /** @var array<string, JiraIssueId> $issues */
         $issues = [];
 
@@ -43,13 +48,15 @@ final class LogEntry
             );
 
             if ($matches === null) {
-                $issues[trim($description . ' ' . $fallbackIssue->id)] = $fallbackIssue;
+                $issues[trim($description . ' ' . $fallbackIssue->key->key)] = $fallbackIssue;
 
                 continue;
             }
 
             foreach ($matches as $match) {
-                $issues[trim($description)] = new JiraIssueId($match[1]);
+                $issueKey = IssueKey::make($match[1]);
+
+                $issues[trim($description)] = new JiraIssueId($getIssueIdForKey($issueKey), $issueKey);
             }
         }
 
@@ -80,6 +87,6 @@ final class LogEntry
     public function appliesToSameIssueAndDay(self $other): bool
     {
         return $this->date->equals($other->date)
-            && $this->issue->id === $other->issue->id;
+            && $this->issue->id->id === $other->issue->id->id;
     }
 }

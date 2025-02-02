@@ -4,41 +4,58 @@ declare(strict_types=1);
 
 namespace TimeSyncTest\Tempo\Infrastructure;
 
-use  Http\Discovery\Psr17FactoryDiscovery;
+use Http\Discovery\Psr17FactoryDiscovery;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Psl\Exception\InvariantViolationException;
+use Psl\Type;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use TimeSync\Harvest\Domain\SpentDate;
 use TimeSync\Harvest\Domain\TimeEntry;
+use TimeSync\Jira\Domain\GetIssueIdForKey;
+use TimeSync\Jira\Domain\IssueId;
+use TimeSync\Jira\Domain\IssueKey;
 use TimeSync\Tempo\Domain\JiraIssueId;
 use TimeSync\Tempo\Domain\LogEntry;
-use TimeSync\Tempo\Infrastructure\GetWorkLogEntriesViaTempoV3Api;
+use TimeSync\Tempo\Infrastructure\GetWorkLogEntriesViaTempoV4Api;
 
-#[CoversClass(GetWorkLogEntriesViaTempoV3Api::class)]
-final class GetWorkLogEntriesViaTempoV3ApiTest extends TestCase
+use function base_convert;
+use function sha1;
+use function substr;
+
+#[CoversClass(GetWorkLogEntriesViaTempoV4Api::class)]
+final class GetWorkLogEntriesViaTempoV4ApiTest extends TestCase
 {
     /** @var ClientInterface&MockObject */
     private ClientInterface $httpClient;
     private ResponseFactoryInterface $responseFactory;
-    private GetWorkLogEntriesViaTempoV3Api $getEntries;
+    private GetWorkLogEntriesViaTempoV4Api $getEntries;
+    private GetIssueIdForKey&Stub $getId;
 
     protected function setUp(): void
     {
         parent::setUp();
 
+        $this->getId           = $this->createStub(GetIssueIdForKey::class);
         $this->httpClient      = $this->createMock(ClientInterface::class);
         $this->responseFactory = Psr17FactoryDiscovery::findResponseFactory();
-        $this->getEntries      = new GetWorkLogEntriesViaTempoV3Api(
+        $this->getEntries      = new GetWorkLogEntriesViaTempoV4Api(
+            $this->getId,
             $this->httpClient,
             Psr17FactoryDiscovery::findRequestFactory(),
             'abc123',
-            new JiraIssueId('FALLBACK-123'),
+            self::id('FALLBACK-123'),
         );
+
+        $this->getId->method('__invoke')
+            ->willReturnCallback(static function (IssueKey $key): IssueId {
+                return self::id($key->key)->id;
+            });
     }
 
     public function testWillFetchLogEntriesForGivenIssues(): void
@@ -113,8 +130,8 @@ JSON,
 
         self::assertEquals(
             [
-                new LogEntry(new JiraIssueId('AB-12'), 'Working on issue foo harvest:11111', 61, new SpentDate('2022-08-09')),
-                new LogEntry(new JiraIssueId('AB-13'), 'Working on issue bar harvest:11111', 64, new SpentDate('2022-08-09')),
+                new LogEntry(self::id('AB-12'), 'Working on issue foo harvest:11111', 61, new SpentDate('2022-08-09')),
+                new LogEntry(self::id('AB-13'), 'Working on issue bar harvest:11111', 64, new SpentDate('2022-08-09')),
             ],
             ($this->getEntries)(new TimeEntry('11111', 10.0, 'AB1-2, AB1-3, hello', new SpentDate('2022-08-09'))),
         );
@@ -188,8 +205,8 @@ JSON,
 
         self::assertEquals(
             [
-                new LogEntry(new JiraIssueId('AB-12'), 'Working on issue AB-12 harvest:11111', 61, new SpentDate('2022-08-09')),
-                new LogEntry(new JiraIssueId('AB-13'), 'Working on issue AB-13 harvest:11111', 64, new SpentDate('2022-08-09')),
+                new LogEntry(self::id('AB-12'), 'Working on issue AB-12 harvest:11111', 61, new SpentDate('2022-08-09')),
+                new LogEntry(self::id('AB-13'), 'Working on issue AB-13 harvest:11111', 64, new SpentDate('2022-08-09')),
             ],
             ($this->getEntries)(new TimeEntry('11111', 10.0, 'AB1-2, AB1-3, hello', new SpentDate('2022-08-09'))),
         );
@@ -260,6 +277,18 @@ JSON,
                 'AB1-2, AB1-2, AB1-3, AB1-2, AB1-3, hello, hi',
                 new SpentDate('2022-08-09'),
             )),
+        );
+    }
+
+    /** @param non-empty-string $key */
+    private static function id(string $key): JiraIssueId
+    {
+        return new JiraIssueId(
+            IssueId::make(
+                Type\positive_int()
+                    ->coerce(base_convert(substr(sha1($key), 0, 5), 16, 10)),
+            ),
+            IssueKey::make($key),
         );
     }
 }
