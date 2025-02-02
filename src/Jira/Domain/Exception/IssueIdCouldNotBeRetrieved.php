@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace TimeSync\Jira\Domain;
+namespace TimeSync\Jira\Domain\Exception;
 
 use Throwable;
 
