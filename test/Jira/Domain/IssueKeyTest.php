@@ -19,7 +19,7 @@ final class IssueKeyTest extends TestCase
      * @dataProvider validKeys
      */
     #[DataProvider('validKeys')]
-    public function testValidKey(string $key)
+    public function testValidKey(string $key): void
     {
         self::assertSame($key, IssueKey::make($key)->key);
     }
@@ -45,7 +45,7 @@ final class IssueKeyTest extends TestCase
      * @dataProvider invalidKeys
      */
     #[DataProvider('invalidKeys')]
-    public function testInvalidKey(string $key)
+    public function testInvalidKey(string $key): void
     {
         $this->expectException(InvariantViolationException::class);
 
