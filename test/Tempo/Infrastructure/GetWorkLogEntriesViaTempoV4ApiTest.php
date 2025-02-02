@@ -15,6 +15,7 @@ use Psl\Type;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
+use Psr\Http\Message\ResponseInterface;
 use TimeSync\Harvest\Domain\SpentDate;
 use TimeSync\Harvest\Domain\TimeEntry;
 use TimeSync\Jira\Domain\GetIssueIdForKey;
@@ -23,6 +24,7 @@ use TimeSync\Jira\Domain\IssueKey;
 use TimeSync\Tempo\Domain\JiraIssueId;
 use TimeSync\Tempo\Domain\LogEntry;
 use TimeSync\Tempo\Infrastructure\GetWorkLogEntriesViaTempoV4Api;
+use TimeSyncTest\OpenAPI\WrapResponseCallbackInValidationCallback;
 
 use function base_convert;
 use function sha1;
@@ -60,12 +62,21 @@ final class GetWorkLogEntriesViaTempoV4ApiTest extends TestCase
 
     public function testWillFetchLogEntriesForGivenIssues(): void
     {
-        $response = $this->responseFactory->createResponse();
+        $response = $this->responseFactory->createResponse()
+            ->withAddedHeader('Content-Type', 'application/json');
 
         $response->getBody()
             ->write(
                 <<<'JSON'
 {
+  "self": "https://example.com/page",
+  "metadata": {
+    "count": 1,
+    "limit": 50,
+    "offset": 0,
+    "next": "https://example.com/page/next",
+    "previous": "https://example.com/page/previous"
+  },
   "results": [
     {
       "tempoWorklogId": 123,
@@ -77,7 +88,17 @@ final class GetWorkLogEntriesViaTempoV4ApiTest extends TestCase
       "billableSeconds": 60,
       "startDate": "2022-08-09",
       "startTime": "00:00:00",
-      "description": "Working on issue foo harvest:11111"
+      "description": "Working on issue foo harvest:11111",
+      "createdAt": "2017-02-06T16:41:41Z",
+      "startDateTimeUtc": "2017-02-05T16:06:00Z",
+      "self": "https://example.com/this",
+      "updatedAt": "2017-02-06T16:41:41Z",
+      "attributes": {
+        "self": "https://example.com/this/attributes"
+      },
+      "author": {
+        "accountId": "123456:01234567-89ab-cdef-0123-456789abcdef"
+      }
     },
     {
       "tempoWorklogId": 456,
@@ -89,7 +110,17 @@ final class GetWorkLogEntriesViaTempoV4ApiTest extends TestCase
       "billableSeconds": 63,
       "startDate": "2022-08-09",
       "startTime": "00:00:00",
-      "description": "Working on issue bar harvest:11111"
+      "description": "Working on issue bar harvest:11111",
+      "createdAt": "2017-02-06T16:41:41Z",
+      "startDateTimeUtc": "2017-02-05T16:06:00Z",
+      "self": "https://example.com/this",
+      "updatedAt": "2017-02-06T16:41:41Z",
+      "attributes": {
+        "self": "https://example.com/this/attributes"
+      },
+      "author": {
+        "accountId": "123456:01234567-89ab-cdef-0123-456789abcdef"
+      }
     },
     {
       "tempoWorklogId": 456,
@@ -101,7 +132,17 @@ final class GetWorkLogEntriesViaTempoV4ApiTest extends TestCase
       "billableSeconds": 63,
       "startDate": "2022-08-09",
       "startTime": "00:00:00",
-      "description": "This log will be ignored, because it doesn't match the input time entry harvest:12345"
+      "description": "This log will be ignored, because it doesn't match the input time entry harvest:12345",
+      "createdAt": "2017-02-06T16:41:41Z",
+      "startDateTimeUtc": "2017-02-05T16:06:00Z",
+      "self": "https://example.com/this",
+      "updatedAt": "2017-02-06T16:41:41Z",
+      "attributes": {
+        "self": "https://example.com/this/attributes"
+      },
+      "author": {
+        "accountId": "123456:01234567-89ab-cdef-0123-456789abcdef"
+      }
     }
   ]
 }
@@ -113,7 +154,7 @@ JSON,
             ->with(self::callback(static function (RequestInterface $request): bool {
                 self::assertSame('GET', $request->getMethod());
                 self::assertSame(
-                    'https://api.tempo.io/4/worklogs?issue=AB1-2&issue=AB1-3&issue=FALLBACK-123&from=2022-08-09&to=2022-08-09&limit=1000',
+                    'https://api.tempo.io/4/worklogs?issueId=285638&issueId=413713&issueId=265303&from=2022-08-09&to=2022-08-09&limit=1000',
                     $request->getUri()->__toString(),
                 );
                 self::assertSame(
@@ -126,7 +167,10 @@ JSON,
 
                 return true;
             }))
-            ->willReturn($response);
+            ->willReturnCallback(WrapResponseCallbackInValidationCallback::wrap(
+                __DIR__ . '/tempo-core.yaml',
+                static fn (): ResponseInterface => $response,
+            ));
 
         self::assertEquals(
             [
@@ -139,12 +183,21 @@ JSON,
 
     public function testWillFetchLogEntriesForGivenIssuesEvenIfIssueSelfUrlIsNotContainingTheIssueId(): void
     {
-        $response = $this->responseFactory->createResponse();
+        $response = $this->responseFactory->createResponse()
+            ->withAddedHeader('Content-Type', 'application/json');
 
         $response->getBody()
             ->write(
                 <<<'JSON'
 {
+  "self": "https://example.com/page",
+  "metadata": {
+    "count": 1,
+    "limit": 50,
+    "offset": 0,
+    "next": "https://example.com/page/next",
+    "previous": "https://example.com/page/previous"
+  },
   "results": [
     {
       "tempoWorklogId": 123,
@@ -156,7 +209,17 @@ JSON,
       "billableSeconds": 60,
       "startDate": "2022-08-09",
       "startTime": "00:00:00",
-      "description": "Working on issue AB-12 harvest:11111"
+      "description": "Working on issue AB-12 harvest:11111",
+      "createdAt": "2017-02-06T16:41:41Z",
+      "startDateTimeUtc": "2017-02-05T16:06:00Z",
+      "self": "https://example.com/this",
+      "updatedAt": "2017-02-06T16:41:41Z",
+      "attributes": {
+        "self": "https://example.com/this/attributes"
+      },
+      "author": {
+        "accountId": "123456:01234567-89ab-cdef-0123-456789abcdef"
+      }
     },
     {
       "tempoWorklogId": 456,
@@ -168,7 +231,17 @@ JSON,
       "billableSeconds": 63,
       "startDate": "2022-08-09",
       "startTime": "00:00:00",
-      "description": "Working on issue AB-13 harvest:11111"
+      "description": "Working on issue AB-13 harvest:11111",
+      "createdAt": "2017-02-06T16:41:41Z",
+      "startDateTimeUtc": "2017-02-05T16:06:00Z",
+      "self": "https://example.com/this",
+      "updatedAt": "2017-02-06T16:41:41Z",
+      "attributes": {
+        "self": "https://example.com/this/attributes"
+      },
+      "author": {
+        "accountId": "123456:01234567-89ab-cdef-0123-456789abcdef"
+      }
     },
     {
       "tempoWorklogId": 789,
@@ -180,7 +253,17 @@ JSON,
       "billableSeconds": 63,
       "startDate": "2022-08-09",
       "startTime": "00:00:00",
-      "description": "This log will be ignored, because it doesn't match the input time entry harvest:12345"
+      "description": "This log will be ignored, because it doesn't match the input time entry harvest:12345",
+      "createdAt": "2017-02-06T16:41:41Z",
+      "startDateTimeUtc": "2017-02-05T16:06:00Z",
+      "self": "https://example.com/this",
+      "updatedAt": "2017-02-06T16:41:41Z",
+      "attributes": {
+        "self": "https://example.com/this/attributes"
+      },
+      "author": {
+        "accountId": "123456:01234567-89ab-cdef-0123-456789abcdef"
+      }
     },
     {
       "tempoWorklogId": 101112,
@@ -192,7 +275,17 @@ JSON,
       "billableSeconds": 63,
       "startDate": "2022-08-09",
       "startTime": "00:00:00",
-      "description": "This log will be ignored, because it doesn't have an associated harvest id"
+      "description": "This log will be ignored, because it doesn't have an associated harvest id",
+      "createdAt": "2017-02-06T16:41:41Z",
+      "startDateTimeUtc": "2017-02-05T16:06:00Z",
+      "self": "https://example.com/this",
+      "updatedAt": "2017-02-06T16:41:41Z",
+      "attributes": {
+        "self": "https://example.com/this/attributes"
+      },
+      "author": {
+        "accountId": "123456:01234567-89ab-cdef-0123-456789abcdef"
+      }
     }
   ]
 }
@@ -201,7 +294,10 @@ JSON,
 
         $this->httpClient->expects(self::once())
             ->method('sendRequest')
-            ->willReturn($response);
+            ->willReturnCallback(WrapResponseCallbackInValidationCallback::wrap(
+                __DIR__ . '/tempo-core.yaml',
+                static fn (): ResponseInterface => $response,
+            ));
 
         self::assertEquals(
             [
@@ -214,7 +310,8 @@ JSON,
 
     public function testWillRejectNon200HttpResponses(): void
     {
-        $response = $this->responseFactory->createResponse(201);
+        $response = $this->responseFactory->createResponse(201)
+            ->withAddedHeader('Content-Type', 'application/json');
 
         $response->getBody()
             ->write('HEHE!');
@@ -224,13 +321,13 @@ JSON,
             ->willReturn($response);
 
         $this->expectException(InvariantViolationException::class);
-        $this->expectExceptionMessage("Request https://api.tempo.io/4/worklogs?issue=AB1-2&issue=AB1-3&issue=FALLBACK-123&from=2022-08-09&to=2022-08-09&limit=1000  not successful: 201\nHEHE!");
+        $this->expectExceptionMessage("Request https://api.tempo.io/4/worklogs?issueId=285638&issueId=413713&issueId=265303&from=2022-08-09&to=2022-08-09&limit=1000  not successful: 201\nHEHE!");
 
         ($this->getEntries)(new TimeEntry('123', 10.0, 'AB1-2, AB1-3, hello', new SpentDate('2022-08-09')));
     }
 
     /**
-     * Tempo started rejecting `/core/3/worklogs?issue=id&issue=id` queries when
+     * Tempo started rejecting `/core/3/worklogs?issueId=id&issueId=id` queries when
      * the `id` is the same: that kind of query now leads to a 404 error.
      *
      * In order to avoid this problem, we de-duplicate any queried issue IDs before
@@ -239,12 +336,21 @@ JSON,
     #[Group('#39')]
     public function testWillDeDuplicateJiraIssueIdsBeforeQuerying(): void
     {
-        $response = $this->responseFactory->createResponse();
+        $response = $this->responseFactory->createResponse()
+            ->withAddedHeader('Content-Type', 'application/json');
 
         $response->getBody()
             ->write(
                 <<<'JSON'
 {
+  "self": "https://example.com/page",
+  "metadata": {
+    "count": 1,
+    "limit": 50,
+    "offset": 0,
+    "next": "https://example.com/page/next",
+    "previous": "https://example.com/page/previous"
+  },
   "results": []
 }
 JSON,
@@ -255,7 +361,7 @@ JSON,
             ->with(self::callback(static function (RequestInterface $request): bool {
                 self::assertSame('GET', $request->getMethod());
                 self::assertSame(
-                    'https://api.tempo.io/4/worklogs?issue=AB1-2&issue=AB1-3&issue=FALLBACK-123&from=2022-08-09&to=2022-08-09&limit=1000',
+                    'https://api.tempo.io/4/worklogs?issueId=285638&issueId=413713&issueId=265303&from=2022-08-09&to=2022-08-09&limit=1000',
                     $request->getUri()->__toString(),
                 );
                 self::assertSame(
@@ -268,7 +374,10 @@ JSON,
 
                 return true;
             }))
-            ->willReturn($response);
+            ->willReturnCallback(WrapResponseCallbackInValidationCallback::wrap(
+                __DIR__ . '/tempo-core.yaml',
+                static fn (): ResponseInterface => $response,
+            ));
 
         self::assertEmpty(
             ($this->getEntries)(new TimeEntry(

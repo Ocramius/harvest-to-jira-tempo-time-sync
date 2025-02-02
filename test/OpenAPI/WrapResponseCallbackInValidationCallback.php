@@ -11,6 +11,7 @@ use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Yaml\Yaml;
 
 use function Psl\File\read;
+use function str_replace;
 
 final class WrapResponseCallbackInValidationCallback
 {
@@ -29,7 +30,7 @@ final class WrapResponseCallbackInValidationCallback
             $requestValidator  = $validatorBuilder->getRequestValidator();
             $responseValidator = $validatorBuilder->getResponseValidator();
 
-            $operation = $requestValidator->validate($request);
+            $operation = $requestValidator->validate(self::fixUpKnownQueryArrayParameters($request));
 
             $response = $callback($request);
 
@@ -37,5 +38,21 @@ final class WrapResponseCallbackInValidationCallback
 
             return $response;
         };
+    }
+
+    /**
+     * Converts known array query parameters to PHP-array-alike syntax
+     *
+     * @see https://github.com/thephpleague/openapi-psr7-validator/issues/181
+     * @see https://github.com/thephpleague/openapi-psr7-validator/pull/182
+     * @see https://swagger.io/docs/specification/v3_0/serialization/
+     */
+    private static function fixUpKnownQueryArrayParameters(RequestInterface $request): RequestInterface
+    {
+        $uri = $request->getUri();
+
+        return $request->withUri(
+            $uri->withQuery(str_replace('issueId=', 'issueId[]=', $uri->getQuery())),
+        );
     }
 }

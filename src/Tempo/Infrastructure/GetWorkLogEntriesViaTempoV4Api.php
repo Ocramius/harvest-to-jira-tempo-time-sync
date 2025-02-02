@@ -43,8 +43,7 @@ final readonly class GetWorkLogEntriesViaTempoV4Api implements GetWorkLogEntries
         $query = implode(
             '&',
             array_unique(array_map(
-                // @TODO this will fail?
-                static fn (LogEntry $entry): string => 'issue=' . $entry->issue->key->key,
+                static fn (LogEntry $entry): string => 'issueId=' . $entry->issue->id->id,
                 LogEntry::splitTimeEntry($this->getId, $timeEntry, $this->fallbackJiraIssue),
             )),
         )

@@ -51,7 +51,7 @@ final class AddWorkLogEntriesViaTempoV4ApiTest extends TestCase
     {
         $response = $this->responseFactory->createResponse()
             ->withHeader('Content-Type', 'application/json');
-        
+
         $response->getBody()->write(<<<'JSON'
 {
   "attributes": {
@@ -75,8 +75,7 @@ final class AddWorkLogEntriesViaTempoV4ApiTest extends TestCase
   "timeSpentSeconds": 3600,
   "updatedAt": "2017-02-06T16:41:41Z"
 }
-JSON
-);
+JSON,);
 
         $this->httpClient->expects(self::once())
             ->method('sendRequest')
@@ -125,7 +124,7 @@ JSON
             }))
             ->willReturnCallback(WrapResponseCallbackInValidationCallback::wrap(
                 __DIR__ . '/tempo-core.yaml',
-                static fn () : ResponseInterface => $response,
+                static fn (): ResponseInterface => $response,
             ));
 
         ($this->addEntry)(new LogEntry(
