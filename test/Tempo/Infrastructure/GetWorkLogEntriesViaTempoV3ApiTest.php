@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace TimeSyncTest\Tempo\Infrastructure;
 
-use Http\Discovery\Psr17FactoryDiscovery;
+use  Http\Discovery\Psr17FactoryDiscovery;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psl\Exception\InvariantViolationException;
@@ -17,7 +18,7 @@ use TimeSync\Tempo\Domain\JiraIssueId;
 use TimeSync\Tempo\Domain\LogEntry;
 use TimeSync\Tempo\Infrastructure\GetWorkLogEntriesViaTempoV3Api;
 
-/** @covers \TimeSync\Tempo\Infrastructure\GetWorkLogEntriesViaTempoV3Api */
+#[CoversClass(GetWorkLogEntriesViaTempoV3Api::class)]
 final class GetWorkLogEntriesViaTempoV3ApiTest extends TestCase
 {
     /** @var ClientInterface&MockObject */

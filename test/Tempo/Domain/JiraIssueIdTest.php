@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace TimeSyncTest\Tempo\Domain;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psl\Exception\InvariantViolationException;
 use TimeSync\Tempo\Domain\JiraIssueId;
 
-/** @covers \TimeSync\Tempo\Domain\JiraIssueId */
+#[CoversClass(JiraIssueId::class)]
 final class JiraIssueIdTest extends TestCase
 {
     /**

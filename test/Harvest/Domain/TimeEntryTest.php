@@ -6,12 +6,13 @@ namespace TimeSyncTest\Harvest\Domain;
 
 use CuyZ\Valinor\Mapper\Source\JsonSource;
 use CuyZ\Valinor\MapperBuilder;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psl\Exception\InvariantViolationException;
 use TimeSync\Harvest\Domain\SpentDate;
 use TimeSync\Harvest\Domain\TimeEntry;
 
-/** @covers \TimeSync\Harvest\Domain\TimeEntry */
+#[CoversClass(TimeEntry::class)]
 final class TimeEntryTest extends TestCase
 {
     public function testCanHydrateFromHarvestRecord(): void

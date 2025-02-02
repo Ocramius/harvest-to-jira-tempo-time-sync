@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace TimeSyncTest\Tempo\Domain;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use TimeSync\Harvest\Domain\SpentDate;
 use TimeSync\Harvest\Domain\TimeEntry;
 use TimeSync\Tempo\Domain\JiraIssueId;
 use TimeSync\Tempo\Domain\LogEntry;
 
-/** @covers \TimeSync\Tempo\Domain\LogEntry */
+#[CoversClass(LogEntry::class)]
 final class LogEntryTest extends TestCase
 {
     /**
