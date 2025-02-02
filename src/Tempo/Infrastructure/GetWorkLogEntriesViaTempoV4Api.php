@@ -72,8 +72,8 @@ final readonly class GetWorkLogEntriesViaTempoV4Api implements GetWorkLogEntries
         );
 
         $logEntries = array_filter(array_map(
-            function (array $row): LogEntry|null {
-                $issueId = JiraIssueId::fromSelfUrlOrDescription($this->getId, $row['issue']['self'], $row['description']);
+            static function (array $row): LogEntry|null {
+                $issueId = JiraIssueId::fromIdAndDescription($row['issue']['id'], $row['description']);
 
                 if ($issueId === null) {
                     return null;
@@ -93,6 +93,8 @@ final readonly class GetWorkLogEntriesViaTempoV4Api implements GetWorkLogEntries
                 Psl\Type\shape([
                     'results' => Psl\Type\vec(Psl\Type\shape([
                         'issue'            => Psl\Type\shape([
+                            // Note: this may potentially be completely missing: we're doing a risky coercion here
+                            'id'   => Psl\Type\positive_int(),
                             'self' => Psl\Type\non_empty_string(),
                         ]),
                         'timeSpentSeconds' => Psl\Type\positive_int(),

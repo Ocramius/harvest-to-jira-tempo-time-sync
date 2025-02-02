@@ -81,14 +81,14 @@ final class GetWorkLogEntriesViaTempoV4ApiTest extends TestCase
     {
       "tempoWorklogId": 123,
       "issue": {
-        "self": "https://foo.atlassian.net/rest/api/2/issue/AB-12",
+        "self": "https://foo.atlassian.net/rest/api/2/issue/123",
         "id": 123
       },
       "timeSpentSeconds": 61,
       "billableSeconds": 60,
       "startDate": "2022-08-09",
       "startTime": "00:00:00",
-      "description": "Working on issue foo harvest:11111",
+      "description": "AB-12 Working on issue foo harvest:11111",
       "createdAt": "2017-02-06T16:41:41Z",
       "startDateTimeUtc": "2017-02-05T16:06:00Z",
       "self": "https://example.com/this",
@@ -103,14 +103,14 @@ final class GetWorkLogEntriesViaTempoV4ApiTest extends TestCase
     {
       "tempoWorklogId": 456,
       "issue": {
-        "self": "https://foo.atlassian.net/rest/api/2/issue/AB-13",
+        "self": "https://foo.atlassian.net/rest/api/2/issue/456",
         "id": 456
       },
       "timeSpentSeconds": 64,
       "billableSeconds": 63,
       "startDate": "2022-08-09",
       "startTime": "00:00:00",
-      "description": "Working on issue bar harvest:11111",
+      "description": "Working on issue bar AB-13 harvest:11111",
       "createdAt": "2017-02-06T16:41:41Z",
       "startDateTimeUtc": "2017-02-05T16:06:00Z",
       "self": "https://example.com/this",
@@ -125,7 +125,7 @@ final class GetWorkLogEntriesViaTempoV4ApiTest extends TestCase
     {
       "tempoWorklogId": 456,
       "issue": {
-        "self": "https://foo.atlassian.net/rest/api/2/issue/AB-13",
+        "self": "https://foo.atlassian.net/rest/api/2/issue/456",
         "id": 456
       },
       "timeSpentSeconds": 64,
@@ -174,8 +174,24 @@ JSON,
 
         self::assertEquals(
             [
-                new LogEntry(self::id('AB-12'), 'Working on issue foo harvest:11111', 61, new SpentDate('2022-08-09')),
-                new LogEntry(self::id('AB-13'), 'Working on issue bar harvest:11111', 64, new SpentDate('2022-08-09')),
+                new LogEntry(
+                    new JiraIssueId(
+                        IssueId::make(123),
+                        IssueKey::make('AB-12'),
+                    ),
+                    'AB-12 Working on issue foo harvest:11111',
+                    61,
+                    new SpentDate('2022-08-09'),
+                ),
+                new LogEntry(
+                    new JiraIssueId(
+                        IssueId::make(456),
+                        IssueKey::make('AB-13'),
+                    ),
+                    'Working on issue bar AB-13 harvest:11111',
+                    64,
+                    new SpentDate('2022-08-09'),
+                ),
             ],
             ($this->getEntries)(new TimeEntry('11111', 10.0, 'AB1-2, AB1-3, hello', new SpentDate('2022-08-09'))),
         );
@@ -301,8 +317,24 @@ JSON,
 
         self::assertEquals(
             [
-                new LogEntry(self::id('AB-12'), 'Working on issue AB-12 harvest:11111', 61, new SpentDate('2022-08-09')),
-                new LogEntry(self::id('AB-13'), 'Working on issue AB-13 harvest:11111', 64, new SpentDate('2022-08-09')),
+                new LogEntry(
+                    new JiraIssueId(
+                        IssueId::make(12345),
+                        IssueKey::make('AB-12'),
+                    ),
+                    'Working on issue AB-12 harvest:11111',
+                    61,
+                    new SpentDate('2022-08-09'),
+                ),
+                new LogEntry(
+                    new JiraIssueId(
+                        IssueId::make(12346),
+                        IssueKey::make('AB-13'),
+                    ),
+                    'Working on issue AB-13 harvest:11111',
+                    64,
+                    new SpentDate('2022-08-09'),
+                ),
             ],
             ($this->getEntries)(new TimeEntry('11111', 10.0, 'AB1-2, AB1-3, hello', new SpentDate('2022-08-09'))),
         );

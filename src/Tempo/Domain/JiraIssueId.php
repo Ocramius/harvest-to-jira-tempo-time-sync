@@ -39,21 +39,18 @@ final readonly class JiraIssueId
     }
 
     /**
+     * @param positive-int $id
+     *
      * Guesses the Jira issue ID by looking at a URL.
      * If the URL doesn't match, we look at the description, searching for
      * anything that may resemble a Jira issue identifier, picking that as
      * our best guess.
      */
-    public static function fromSelfUrlOrDescription(GetIssueIdForKey $getId, string $url, string $description): self|null
+    public static function fromIdAndDescription(int $id, string $description): self|null
     {
-        try {
-            return self::fromSelfUrl($getId, $url);
-        } catch (InvariantViolationException) {
-        }
-
         $match = Psl\Regex\first_match(
             $description,
-            '/([A-Z][A-Z0-9]*-[0-9]+)/',
+            '/([A-Z][A-Z0-9]*-[1-9]+\d*)/',
             Psl\Type\shape([
                 1 => Psl\Type\non_empty_string(),
             ]),
@@ -63,8 +60,9 @@ final readonly class JiraIssueId
             return null;
         }
 
-        $key = IssueKey::make($match[1]);
-
-        return new self($getId($key), $key);
+        return new self(
+            IssueId::make(Psl\Type\positive_int()->coerce($id)),
+            IssueKey::make($match[1]),
+        );
     }
 }

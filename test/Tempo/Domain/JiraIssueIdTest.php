@@ -54,18 +54,19 @@ final class JiraIssueIdTest extends TestCase
 
     /**
      * @param non-empty-string $expectedKey
+     * @param int<1, max>      $givenId
      * @param int<1, max>      $expectedId
      *
-     * @dataProvider validSelfUrlsAndDescriptions
+     * @dataProvider validIdAndDescriptions
      */
-    #[DataProvider('validSelfUrlsAndDescriptions')]
+    #[DataProvider('validIdAndDescriptions')]
     public function testFromValidSelfUrlOrDescription(
-        string $url,
+        int $givenId,
         string $description,
         string $expectedKey,
         int $expectedId,
     ): void {
-        $id = JiraIssueId::fromSelfUrlOrDescription($this->getId, $url, $description);
+        $id = JiraIssueId::fromIdAndDescription($givenId, $description);
 
         self::assertNotNull($id);
         self::assertEquals(IssueKey::make($expectedKey), $id->key);
@@ -82,14 +83,14 @@ final class JiraIssueIdTest extends TestCase
         ];
     }
 
-    /** @return non-empty-list<array{string, string, non-empty-string, int<1, max>}> */
-    public static function validSelfUrlsAndDescriptions(): array
+    /** @return non-empty-list<array{int<1, max>, numeric-string, non-empty-string, int<1, max>}> */
+    public static function validIdAndDescriptions(): array
     {
         return [
-            ['/A-1', 'A-1', 'A-1', 18439],
-            ['/', 'A-1', 'A-1', 18439],
-            ['/', 'I worked on A-1 during the night', 'A-1', 18439],
-            ['/', 'i worked on AA-11 during the night', 'AA-11', 447406],
+            [112233, 'A-1', 'A-1', 112233],
+            [11223344, 'A-1', 'A-1', 11223344],
+            [556677, 'I worked on A-1 during the night', 'A-1', 556677],
+            [8899, 'i worked on AA-11 during the night', 'AA-11', 8899],
         ];
     }
 
@@ -138,41 +139,41 @@ final class JiraIssueIdTest extends TestCase
         ];
     }
 
-    /** @dataProvider invalidSelfUrlsAndDescriptions */
-    #[DataProvider('invalidSelfUrlsAndDescriptions')]
+    /** @dataProvider invalidIdAndDescriptions */
+    #[DataProvider('invalidIdAndDescriptions')]
     public function testFromInvalidSelfUrlOrDescription(
-        string $url,
+        int $id,
         string $description,
     ): void {
-        self::assertNull(JiraIssueId::fromSelfUrlOrDescription($this->getId, $url, $description));
+        self::assertNull(JiraIssueId::fromIdAndDescription($id, $description));
     }
 
-    /** @return non-empty-list<array{string, string}> */
-    public static function invalidSelfUrlsAndDescriptions(): array
+    /** @return non-empty-list<array{positive-int, string}> */
+    public static function invalidIdAndDescriptions(): array
     {
         return [
             [
-                '',
+                1,
                 '',
             ],
             [
-                '/A-',
+                1,
                 'FOO-',
             ],
             [
-                'http://example.com/FOO',
+                123,
                 ' FOO - BAR',
             ],
             [
-                'http://example.com/FOO',
+                123,
                 ' FOO - 123',
             ],
             [
-                'http://example.com/FOO',
+                123,
                 ' FOO- 123',
             ],
             [
-                'http://example.com/FOO',
+                123,
                 ' FOO -123',
             ],
         ];
