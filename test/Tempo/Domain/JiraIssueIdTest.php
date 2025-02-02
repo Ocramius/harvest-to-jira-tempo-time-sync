@@ -83,7 +83,7 @@ final class JiraIssueIdTest extends TestCase
         ];
     }
 
-    /** @return non-empty-list<array{int<1, max>, numeric-string, non-empty-string, int<1, max>}> */
+    /** @return non-empty-list<array{int<1, max>, non-empty-string, non-empty-string, int<1, max>}> */
     public static function validIdAndDescriptions(): array
     {
         return [
@@ -139,7 +139,11 @@ final class JiraIssueIdTest extends TestCase
         ];
     }
 
-    /** @dataProvider invalidIdAndDescriptions */
+    /**
+     * @param int<1, max> $id
+     *
+     * @dataProvider invalidIdAndDescriptions
+     */
     #[DataProvider('invalidIdAndDescriptions')]
     public function testFromInvalidSelfUrlOrDescription(
         int $id,
