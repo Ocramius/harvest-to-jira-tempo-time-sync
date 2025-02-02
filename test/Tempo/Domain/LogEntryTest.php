@@ -6,15 +6,36 @@ namespace TimeSyncTest\Tempo\Domain;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
+use Psl\Type;
 use TimeSync\Harvest\Domain\SpentDate;
 use TimeSync\Harvest\Domain\TimeEntry;
+use TimeSync\Jira\Domain\GetIssueIdForKey;
+use TimeSync\Jira\Domain\IssueId;
+use TimeSync\Jira\Domain\IssueKey;
 use TimeSync\Tempo\Domain\JiraIssueId;
 use TimeSync\Tempo\Domain\LogEntry;
+
+use function base_convert;
+use function sha1;
+use function substr;
 
 #[CoversClass(LogEntry::class)]
 final class LogEntryTest extends TestCase
 {
+    private GetIssueIdForKey&Stub $getId;
+
+    protected function setUp(): void
+    {
+        $this->getId = $this->createStub(GetIssueIdForKey::class);
+
+        $this->getId->method('__invoke')
+            ->willReturnCallback(static function (IssueKey $key): IssueId {
+                return self::id($key->key)->id;
+            });
+    }
+
     /**
      * @param non-empty-string $description
      * @param non-empty-string $harvestId
@@ -25,7 +46,7 @@ final class LogEntryTest extends TestCase
     public function testMatchesGivenTimeEntry(string $description, string $harvestId): void
     {
         self::assertTrue(
-            (new LogEntry(new JiraIssueId('AB12-123'), $description, 1, new SpentDate('2022-08-07')))
+            (new LogEntry(self::id('AB12-123'), $description, 1, new SpentDate('2022-08-07')))
                 ->matchesTimeEntry(new TimeEntry($harvestId, 0.1, 'hello', new SpentDate('2022-08-07'))),
         );
     }
@@ -51,7 +72,7 @@ final class LogEntryTest extends TestCase
     public function testDoesNotMatchGivenTimeEntry(string $description, string $harvestId): void
     {
         self::assertFalse(
-            (new LogEntry(new JiraIssueId('AB12-123'), $description, 1, new SpentDate('2022-08-07')))
+            (new LogEntry(self::id('AB12-123'), $description, 1, new SpentDate('2022-08-07')))
                 ->matchesTimeEntry(new TimeEntry($harvestId, 0.1, 'hello', new SpentDate('2022-08-07'))),
         );
     }
@@ -82,7 +103,7 @@ final class LogEntryTest extends TestCase
     public function testDoesNotMatchGivenTimeEntryIfDateDoesNotMatch(string $description, string $harvestId): void
     {
         self::assertFalse(
-            (new LogEntry(new JiraIssueId('AB12-123'), $description, 1, new SpentDate('2022-08-07')))
+            (new LogEntry(self::id('AB12-123'), $description, 1, new SpentDate('2022-08-07')))
                 ->matchesTimeEntry(new TimeEntry($harvestId, 0.1, 'hello', new SpentDate('2022-08-08'))),
         );
     }
@@ -97,7 +118,7 @@ final class LogEntryTest extends TestCase
     {
         self::assertEquals(
             $logEntries,
-            LogEntry::splitTimeEntry($timeEntry, new JiraIssueId('A1-1')),
+            LogEntry::splitTimeEntry($this->getId, $timeEntry, self::id('A1-1')),
         );
     }
 
@@ -113,10 +134,10 @@ final class LogEntryTest extends TestCase
                     new SpentDate('2022-09-05'),
                 ),
                 [
-                    new LogEntry(new JiraIssueId('AB12-10'), 'AB12-10 harvest:123', 9000, new SpentDate('2022-09-05')),
-                    new LogEntry(new JiraIssueId('AB12-20'), 'AB12-20 harvest:123', 9000, new SpentDate('2022-09-05')),
-                    new LogEntry(new JiraIssueId('AB12-30'), 'AB12-30 harvest:123', 9000, new SpentDate('2022-09-05')),
-                    new LogEntry(new JiraIssueId('AB12-40'), 'AB12-40 harvest:123', 9000, new SpentDate('2022-09-05')),
+                    new LogEntry(self::id('AB12-10'), 'AB12-10 harvest:123', 9000, new SpentDate('2022-09-05')),
+                    new LogEntry(self::id('AB12-20'), 'AB12-20 harvest:123', 9000, new SpentDate('2022-09-05')),
+                    new LogEntry(self::id('AB12-30'), 'AB12-30 harvest:123', 9000, new SpentDate('2022-09-05')),
+                    new LogEntry(self::id('AB12-40'), 'AB12-40 harvest:123', 9000, new SpentDate('2022-09-05')),
                 ],
             ],
             'time entry with no assigned issue'               => [
@@ -127,7 +148,7 @@ final class LogEntryTest extends TestCase
                     new SpentDate('2022-09-05'),
                 ),
                 [
-                    new LogEntry(new JiraIssueId('A1-1'), 'A1-1 harvest:124', 36000, new SpentDate('2022-09-05')),
+                    new LogEntry(self::id('A1-1'), 'A1-1 harvest:124', 36000, new SpentDate('2022-09-05')),
                 ],
             ],
             'time entry with no assigned issue, but with a description'               => [
@@ -138,7 +159,7 @@ final class LogEntryTest extends TestCase
                     new SpentDate('2022-09-05'),
                 ),
                 [
-                    new LogEntry(new JiraIssueId('A1-1'), 'hello world A1-1 harvest:124', 36000, new SpentDate('2022-09-05')),
+                    new LogEntry(self::id('A1-1'), 'hello world A1-1 harvest:124', 36000, new SpentDate('2022-09-05')),
                 ],
             ],
             'time entry with multiple issues in single CSV entry'               => [
@@ -149,10 +170,10 @@ final class LogEntryTest extends TestCase
                     new SpentDate('2022-09-05'),
                 ),
                 [
-                    new LogEntry(new JiraIssueId('A1-2'), 'A1-1 A1-2 harvest:125', 9000, new SpentDate('2022-09-05')),
-                    new LogEntry(new JiraIssueId('A2-4'), 'A2-3 A2-4 harvest:125', 9000, new SpentDate('2022-09-05')),
-                    new LogEntry(new JiraIssueId('A3-5'), 'A3-5 harvest:125', 9000, new SpentDate('2022-09-05')),
-                    new LogEntry(new JiraIssueId('A4-6'), 'A4-6 harvest:125', 9000, new SpentDate('2022-09-05')),
+                    new LogEntry(self::id('A1-2'), 'A1-1 A1-2 harvest:125', 9000, new SpentDate('2022-09-05')),
+                    new LogEntry(self::id('A2-4'), 'A2-3 A2-4 harvest:125', 9000, new SpentDate('2022-09-05')),
+                    new LogEntry(self::id('A3-5'), 'A3-5 harvest:125', 9000, new SpentDate('2022-09-05')),
+                    new LogEntry(self::id('A4-6'), 'A4-6 harvest:125', 9000, new SpentDate('2022-09-05')),
                 ],
             ],
             'log entries with a short description'               => [
@@ -163,8 +184,8 @@ final class LogEntryTest extends TestCase
                     new SpentDate('2022-09-05'),
                 ),
                 [
-                    new LogEntry(new JiraIssueId('A1-1'), 'A1-1 done some work harvest:125', 18000, new SpentDate('2022-09-05')),
-                    new LogEntry(new JiraIssueId('A2-2'), 'more A2-2 work harvest:125', 18000, new SpentDate('2022-09-05')),
+                    new LogEntry(self::id('A1-1'), 'A1-1 done some work harvest:125', 18000, new SpentDate('2022-09-05')),
+                    new LogEntry(self::id('A2-2'), 'more A2-2 work harvest:125', 18000, new SpentDate('2022-09-05')),
                 ],
             ],
             'log entries with issue id, as well as issues without id'               => [
@@ -175,8 +196,8 @@ final class LogEntryTest extends TestCase
                     new SpentDate('2022-09-05'),
                 ),
                 [
-                    new LogEntry(new JiraIssueId('A2-2'), 'A2-2 done some work harvest:125', 18000, new SpentDate('2022-09-05')),
-                    new LogEntry(new JiraIssueId('A1-1'), 'more work A1-1 harvest:125', 18000, new SpentDate('2022-09-05')),
+                    new LogEntry(self::id('A2-2'), 'A2-2 done some work harvest:125', 18000, new SpentDate('2022-09-05')),
+                    new LogEntry(self::id('A1-1'), 'more work A1-1 harvest:125', 18000, new SpentDate('2022-09-05')),
                 ],
             ],
         ];
@@ -200,8 +221,8 @@ final class LogEntryTest extends TestCase
     ): void {
         self::assertSame(
             $expected,
-            (new LogEntry(new JiraIssueId($issueId1), 'a description', 1, new SpentDate($date1)))
-                ->appliesToSameIssueAndDay(new LogEntry(new JiraIssueId($issueId2), 'another description', 2, new SpentDate($date2))),
+            (new LogEntry(self::id($issueId1), 'a description', 1, new SpentDate($date1)))
+                ->appliesToSameIssueAndDay(new LogEntry(self::id($issueId2), 'another description', 2, new SpentDate($date2))),
         );
     }
 
@@ -215,5 +236,17 @@ final class LogEntryTest extends TestCase
             ['AB12-123', 'AB12-124', '2022-08-01', '2022-08-01', false],
             ['AB12-124', 'AB12-123', '2022-08-01', '2022-08-01', false],
         ];
+    }
+
+    /** @param non-empty-string $key */
+    private static function id(string $key): JiraIssueId
+    {
+        return new JiraIssueId(
+            IssueId::make(
+                Type\positive_int()
+                    ->coerce(base_convert(substr(sha1($key), 0, 5), 16, 10)),
+            ),
+            IssueKey::make($key),
+        );
     }
 }

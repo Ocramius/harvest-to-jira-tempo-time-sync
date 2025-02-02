@@ -55,9 +55,13 @@ jobs:
       - name: "Run sync on everything"
         run: "bin/sync-everything.php"
         env:
+          "FALLBACK_JIRA_ISSUE_INTERNAL_ID": ${{ secrets.FALLBACK_JIRA_ISSUE_INTERNAL_ID }}
           "FALLBACK_JIRA_ISSUE_ID": ${{ secrets.FALLBACK_JIRA_ISSUE_ID }}
           "TEMPO_ACCESS_TOKEN": ${{ secrets.TEMPO_ACCESS_TOKEN }}
           "JIRA_ACCOUNT_ID": ${{ secrets.JIRA_ACCOUNT_ID }}
+          "JIRA_ACCOUNT_EMAIL": ${{ secrets.JIRA_ACCOUNT_EMAIL }}
+          "JIRA_API_TOKEN": ${{ secrets.JIRA_API_TOKEN }}
+          "JIRA_BASE_URL": ${{ secrets.JIRA_BASE_URL }}
           "HARVEST_ACCOUNT_ID": ${{ secrets.HARVEST_ACCOUNT_ID }}
           "HARVEST_ACCESS_TOKEN": ${{ secrets.HARVEST_ACCESS_TOKEN }}
           "HARVEST_PROJECT_ID": ${{ secrets.HARVEST_PROJECT_ID }}

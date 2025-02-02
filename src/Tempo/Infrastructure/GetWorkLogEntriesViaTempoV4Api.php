@@ -9,6 +9,7 @@ use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use TimeSync\Harvest\Domain\SpentDate;
 use TimeSync\Harvest\Domain\TimeEntry;
+use TimeSync\Jira\Domain\GetIssueIdForKey;
 use TimeSync\Tempo\Domain\GetWorkLogEntries;
 use TimeSync\Tempo\Domain\JiraIssueId;
 use TimeSync\Tempo\Domain\LogEntry;
@@ -20,14 +21,15 @@ use function array_values;
 use function implode;
 
 /** @link https://apidocs.tempo.io/v4/#section/API-conventions */
-final class GetWorkLogEntriesViaTempoV3Api implements GetWorkLogEntries
+final readonly class GetWorkLogEntriesViaTempoV4Api implements GetWorkLogEntries
 {
     /** @param non-empty-string $tempoBearerToken */
     public function __construct(
-        private readonly ClientInterface $httpClient,
-        private readonly RequestFactoryInterface $makeRequest,
-        private readonly string $tempoBearerToken,
-        private readonly JiraIssueId $fallbackJiraIssue,
+        private GetIssueIdForKey $getId,
+        private ClientInterface $httpClient,
+        private RequestFactoryInterface $makeRequest,
+        private string $tempoBearerToken,
+        private JiraIssueId $fallbackJiraIssue,
     ) {
     }
 
@@ -41,8 +43,8 @@ final class GetWorkLogEntriesViaTempoV3Api implements GetWorkLogEntries
         $query = implode(
             '&',
             array_unique(array_map(
-                static fn (LogEntry $entry): string => 'issue=' . $entry->issue->id,
-                LogEntry::splitTimeEntry($timeEntry, $this->fallbackJiraIssue),
+                static fn (LogEntry $entry): string => 'issueId=' . $entry->issue->id->id,
+                LogEntry::splitTimeEntry($this->getId, $timeEntry, $this->fallbackJiraIssue),
             )),
         )
             . '&from=' . $timeEntry->spent_date->toString()
@@ -50,7 +52,7 @@ final class GetWorkLogEntriesViaTempoV3Api implements GetWorkLogEntries
             . '&limit=1000';
 
         $request = $this->makeRequest
-            ->createRequest('GET', 'https://api.tempo.io/core/3/worklogs');
+            ->createRequest('GET', 'https://api.tempo.io/4/worklogs');
 
         $request = $request
             ->withUri(
@@ -71,7 +73,7 @@ final class GetWorkLogEntriesViaTempoV3Api implements GetWorkLogEntries
 
         $logEntries = array_filter(array_map(
             static function (array $row): LogEntry|null {
-                $issueId = JiraIssueId::fromSelfUrlOrDescription($row['issue']['self'], $row['description']);
+                $issueId = JiraIssueId::fromIdAndDescription($row['issue']['id'], $row['description']);
 
                 if ($issueId === null) {
                     return null;
@@ -91,6 +93,8 @@ final class GetWorkLogEntriesViaTempoV3Api implements GetWorkLogEntries
                 Psl\Type\shape([
                     'results' => Psl\Type\vec(Psl\Type\shape([
                         'issue'            => Psl\Type\shape([
+                            // Note: this may potentially be completely missing: we're doing a risky coercion here
+                            'id'   => Psl\Type\positive_int(),
                             'self' => Psl\Type\non_empty_string(),
                         ]),
                         'timeSpentSeconds' => Psl\Type\positive_int(),

@@ -5,6 +5,8 @@
     xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
     cacheResult="false"
     failOnDeprecation="true"
+    failOnWarning="true"
+    failOnNotice="true"
     failOnPhpunitDeprecation="true"
     displayDetailsOnPhpunitDeprecations="true"
     displayDetailsOnTestsThatTriggerDeprecations="true"

@@ -6,112 +6,91 @@ namespace TimeSyncTest\Tempo\Domain;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Psl\Exception\InvariantViolationException;
+use Psl\Type;
+use TimeSync\Jira\Domain\GetIssueIdForKey;
+use TimeSync\Jira\Domain\IssueId;
+use TimeSync\Jira\Domain\IssueKey;
 use TimeSync\Tempo\Domain\JiraIssueId;
+
+use function base_convert;
+use function sha1;
+use function substr;
 
 #[CoversClass(JiraIssueId::class)]
 final class JiraIssueIdTest extends TestCase
 {
-    /**
-     * @param non-empty-string $id
-     *
-     * @dataProvider validIds
-     */
-    #[DataProvider('validIds')]
-    public function testValidJiraIssueId(string $id): void
-    {
-        self::assertSame($id, (new JiraIssueId($id))->id);
-    }
+    private GetIssueIdForKey&Stub $getId;
 
-    /** @return non-empty-list<array{non-empty-string}> */
-    public static function validIds(): array
+    protected function setUp(): void
     {
-        return [
-            ['A-1'],
-            ['D22-123'],
-            ['D22-1'],
-            ['D22F-1'],
-        ];
+        $this->getId = $this->createStub(GetIssueIdForKey::class);
+
+        $this->getId->method('__invoke')
+            ->willReturnCallback(static function (IssueKey $key): IssueId {
+                return IssueId::make(
+                    Type\positive_int()
+                        ->coerce(base_convert(substr(sha1($key->key), 0, 5), 16, 10)),
+                );
+            });
     }
 
     /**
-     * @param non-empty-string $id
-     * @param non-empty-string $expectedExceptionMessage
-     *
-     * @dataProvider invalidIds
-     */
-    #[DataProvider('invalidIds')]
-    public function testInvalidJiraIssueId(string $id, string $expectedExceptionMessage): void
-    {
-        $this->expectException(InvariantViolationException::class);
-        $this->expectExceptionMessage($expectedExceptionMessage);
-
-        self::assertSame($id, (new JiraIssueId($id))->id);
-    }
-
-    /** @return non-empty-list<array{non-empty-string, non-empty-string}> */
-    public static function invalidIds(): array
-    {
-        return [
-            ['A', 'Invalid Jira issue ID: "A"'],
-            ['B-', 'Invalid Jira issue ID: "B-"'],
-            ['a-1', 'Invalid Jira issue ID: "a-1"'],
-            ['1-1', 'Invalid Jira issue ID: "1-1"'],
-            ['A- 1', 'Invalid Jira issue ID: "A- 1"'],
-            ['A -1', 'Invalid Jira issue ID: "A -1"'],
-            ['A-A', 'Invalid Jira issue ID: "A-A"'],
-            [' A-1', 'Invalid Jira issue ID: " A-1"'],
-            ['A-1 ', 'Invalid Jira issue ID: "A-1 "'],
-        ];
-    }
-
-    /**
-     * @param non-empty-string $id
+     * @param non-empty-string $expectedKey
+     * @param int<1, max>      $expectedId
      *
      * @dataProvider validSelfUrls
      */
     #[DataProvider('validSelfUrls')]
-    public function testFromSelfUrl(string $url, string $id): void
+    public function testFromSelfUrl(string $url, string $expectedKey, int $expectedId): void
     {
-        self::assertSame($id, JiraIssueId::fromSelfUrl($url)->id);
+        $id = JiraIssueId::fromSelfUrl($this->getId, $url);
+
+        self::assertEquals(IssueKey::make($expectedKey), $id->key);
+        self::assertEquals(IssueId::make($expectedId), $id->id);
     }
 
     /**
-     * @param non-empty-string $expectedId
+     * @param non-empty-string $expectedKey
+     * @param int<1, max>      $givenId
+     * @param int<1, max>      $expectedId
      *
-     * @dataProvider validSelfUrlsAndDescriptions
+     * @dataProvider validIdAndDescriptions
      */
-    #[DataProvider('validSelfUrlsAndDescriptions')]
+    #[DataProvider('validIdAndDescriptions')]
     public function testFromValidSelfUrlOrDescription(
-        string $url,
+        int $givenId,
         string $description,
-        string $expectedId,
+        string $expectedKey,
+        int $expectedId,
     ): void {
-        $id = JiraIssueId::fromSelfUrlOrDescription($url, $description);
+        $id = JiraIssueId::fromIdAndDescription($givenId, $description);
 
         self::assertNotNull($id);
-        self::assertSame($expectedId, $id->id);
+        self::assertEquals(IssueKey::make($expectedKey), $id->key);
+        self::assertEquals(IssueId::make($expectedId), $id->id);
     }
 
-    /** @return non-empty-list<array{non-empty-string, non-empty-string}> */
+    /** @return non-empty-list<array{non-empty-string, non-empty-string, int<1, max>}> */
     public static function validSelfUrls(): array
     {
         return [
-            ['/A-1', 'A-1'],
-            ['http://example.com/A-2', 'A-2'],
-            ['https://foo.atlassian.net/rest/api/2/issue/AB-123', 'AB-123'],
+            ['/A-1', 'A-1', 18439],
+            ['http://example.com/A-2', 'A-2', 233099],
+            ['https://foo.atlassian.net/rest/api/2/issue/AB-123', 'AB-123', 694623],
         ];
     }
 
-    /** @return non-empty-list<array{string, string, non-empty-string}> */
-    public static function validSelfUrlsAndDescriptions(): array
+    /** @return non-empty-list<array{int<1, max>, non-empty-string, non-empty-string, int<1, max>}> */
+    public static function validIdAndDescriptions(): array
     {
         return [
-            ['/A-1', 'A-1', 'A-1'],
-            ['/', 'A-1', 'A-1'],
-            ['/', 'I worked on A-1 during the night', 'A-1'],
-            ['/', 'i worked on AA-11 during the night', 'AA-11'],
+            [112233, 'A-1', 'A-1', 112233],
+            [11223344, 'A-1', 'A-1', 11223344],
+            [556677, 'I worked on A-1 during the night', 'A-1', 556677],
+            [8899, 'i worked on AA-11 during the night', 'AA-11', 8899],
         ];
     }
 
@@ -126,7 +105,7 @@ final class JiraIssueIdTest extends TestCase
         $this->expectException(InvariantViolationException::class);
         $this->expectExceptionMessage($expectedExceptionMessage);
 
-        JiraIssueId::fromSelfUrl($url);
+        JiraIssueId::fromSelfUrl($this->getId, $url);
     }
 
     /** @return non-empty-list<array{string, non-empty-string}> */
@@ -160,41 +139,45 @@ final class JiraIssueIdTest extends TestCase
         ];
     }
 
-    /** @dataProvider invalidSelfUrlsAndDescriptions */
-    #[DataProvider('invalidSelfUrlsAndDescriptions')]
+    /**
+     * @param int<1, max> $id
+     *
+     * @dataProvider invalidIdAndDescriptions
+     */
+    #[DataProvider('invalidIdAndDescriptions')]
     public function testFromInvalidSelfUrlOrDescription(
-        string $url,
+        int $id,
         string $description,
     ): void {
-        self::assertNull(JiraIssueId::fromSelfUrlOrDescription($url, $description));
+        self::assertNull(JiraIssueId::fromIdAndDescription($id, $description));
     }
 
-    /** @return non-empty-list<array{string, string}> */
-    public static function invalidSelfUrlsAndDescriptions(): array
+    /** @return non-empty-list<array{positive-int, string}> */
+    public static function invalidIdAndDescriptions(): array
     {
         return [
             [
-                '',
+                1,
                 '',
             ],
             [
-                '/A-',
+                1,
                 'FOO-',
             ],
             [
-                'http://example.com/FOO',
+                123,
                 ' FOO - BAR',
             ],
             [
-                'http://example.com/FOO',
+                123,
                 ' FOO - 123',
             ],
             [
-                'http://example.com/FOO',
+                123,
                 ' FOO- 123',
             ],
             [
-                'http://example.com/FOO',
+                123,
                 ' FOO -123',
             ],
         ];
