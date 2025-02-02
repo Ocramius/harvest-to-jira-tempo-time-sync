@@ -113,13 +113,13 @@ JSON,
             ->with(self::callback(static function (RequestInterface $request): bool {
                 self::assertSame('GET', $request->getMethod());
                 self::assertSame(
-                    'https://api.tempo.io/core/3/worklogs?issue=AB1-2&issue=AB1-3&issue=FALLBACK-123&from=2022-08-09&to=2022-08-09&limit=1000',
+                    'https://api.tempo.io/4/worklogs?issue=AB1-2&issue=AB1-3&issue=FALLBACK-123&from=2022-08-09&to=2022-08-09&limit=1000',
                     $request->getUri()->__toString(),
                 );
                 self::assertSame(
                     [
-                        'Host'                => ['api.tempo.io'],
-                        'Authorization'       => ['Bearer abc123'],
+                        'Host'          => ['api.tempo.io'],
+                        'Authorization' => ['Bearer abc123'],
                     ],
                     $request->getHeaders(),
                 );
@@ -224,7 +224,7 @@ JSON,
             ->willReturn($response);
 
         $this->expectException(InvariantViolationException::class);
-        $this->expectExceptionMessage("Request https://api.tempo.io/core/3/worklogs?issue=AB1-2&issue=AB1-3&issue=FALLBACK-123&from=2022-08-09&to=2022-08-09&limit=1000  not successful: 201\nHEHE!");
+        $this->expectExceptionMessage("Request https://api.tempo.io/4/worklogs?issue=AB1-2&issue=AB1-3&issue=FALLBACK-123&from=2022-08-09&to=2022-08-09&limit=1000  not successful: 201\nHEHE!");
 
         ($this->getEntries)(new TimeEntry('123', 10.0, 'AB1-2, AB1-3, hello', new SpentDate('2022-08-09')));
     }
@@ -255,13 +255,13 @@ JSON,
             ->with(self::callback(static function (RequestInterface $request): bool {
                 self::assertSame('GET', $request->getMethod());
                 self::assertSame(
-                    'https://api.tempo.io/core/3/worklogs?issue=AB1-2&issue=AB1-3&issue=FALLBACK-123&from=2022-08-09&to=2022-08-09&limit=1000',
+                    'https://api.tempo.io/4/worklogs?issue=AB1-2&issue=AB1-3&issue=FALLBACK-123&from=2022-08-09&to=2022-08-09&limit=1000',
                     $request->getUri()->__toString(),
                 );
                 self::assertSame(
                     [
-                        'Host'                => ['api.tempo.io'],
-                        'Authorization'       => ['Bearer abc123'],
+                        'Host'          => ['api.tempo.io'],
+                        'Authorization' => ['Bearer abc123'],
                     ],
                     $request->getHeaders(),
                 );

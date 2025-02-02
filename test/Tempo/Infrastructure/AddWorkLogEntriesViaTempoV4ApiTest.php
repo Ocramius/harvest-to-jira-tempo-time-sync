@@ -12,12 +12,14 @@ use Psl\Exception\InvariantViolationException;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
+use Psr\Http\Message\ResponseInterface;
 use TimeSync\Harvest\Domain\SpentDate;
 use TimeSync\Jira\Domain\IssueId;
 use TimeSync\Jira\Domain\IssueKey;
 use TimeSync\Tempo\Domain\JiraIssueId;
 use TimeSync\Tempo\Domain\LogEntry;
 use TimeSync\Tempo\Infrastructure\AddWorkLogEntryViaTempoV4Api;
+use TimeSyncTest\OpenAPI\WrapResponseCallbackInValidationCallback;
 
 #[CoversClass(AddWorkLogEntryViaTempoV4Api::class)]
 final class AddWorkLogEntriesViaTempoV4ApiTest extends TestCase
@@ -47,14 +49,41 @@ final class AddWorkLogEntriesViaTempoV4ApiTest extends TestCase
 
     public function testWillAddGivenWorkEntry(): void
     {
-        $response = $this->responseFactory->createResponse();
+        $response = $this->responseFactory->createResponse()
+            ->withHeader('Content-Type', 'application/json');
+        
+        $response->getBody()->write(<<<'JSON'
+{
+  "attributes": {
+    "self": "https://example.com/this/attributes"
+  },
+  "author": {
+    "accountId": "123456:01234567-89ab-cdef-0123-456789abcdef"
+  },
+  "billableSeconds": 1,
+  "createdAt": "2017-02-06T16:41:41Z",
+  "description": "Investigating a problem with our external database system",
+  "issue": {
+    "id": 112233,
+    "self": "https://example.com/this/issue"
+  },
+  "self": "https://example.com/this",
+  "startDate": "2017-02-06",
+  "startDateTimeUtc": "2017-02-05T16:06:00Z",
+  "startTime": "20:06:00",
+  "tempoWorklogId": 126,
+  "timeSpentSeconds": 3600,
+  "updatedAt": "2017-02-06T16:41:41Z"
+}
+JSON
+);
 
         $this->httpClient->expects(self::once())
             ->method('sendRequest')
             ->with(self::callback(static function (RequestInterface $request): bool {
                 self::assertSame('POST', $request->getMethod());
                 self::assertSame(
-                    'https://api.tempo.io/core/3/worklogs',
+                    'https://api.tempo.io/4/worklogs',
                     $request->getUri()->__toString(),
                 );
                 self::assertSame(
@@ -94,7 +123,10 @@ JSON
 
                 return true;
             }))
-            ->willReturn($response);
+            ->willReturnCallback(WrapResponseCallbackInValidationCallback::wrap(
+                __DIR__ . '/tempo-core.yaml',
+                static fn () : ResponseInterface => $response,
+            ));
 
         ($this->addEntry)(new LogEntry(
             new JiraIssueId(IssueId::make(112233), IssueKey::make('AB-12')),
@@ -116,7 +148,7 @@ JSON
             ->willReturn($response);
 
         $this->expectException(InvariantViolationException::class);
-        $this->expectExceptionMessage("Request POST https://api.tempo.io/core/3/worklogs  not successful: 201\nHAHA!");
+        $this->expectExceptionMessage("Request POST https://api.tempo.io/4/worklogs  not successful: 201\nHAHA!");
 
         ($this->addEntry)(new LogEntry(
             new JiraIssueId(IssueId::make(112233), IssueKey::make('AB-12')),

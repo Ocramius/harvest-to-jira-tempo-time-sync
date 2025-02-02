@@ -15,7 +15,7 @@ use TimeSync\Tempo\Domain\SetWorkLogEntry;
 use function array_values;
 
 /** @link https://apidocs.tempo.io/#worklogs */
-final class AddWorkLogEntryViaTempoV4Api implements SetWorkLogEntry
+final readonly class AddWorkLogEntryViaTempoV4Api implements SetWorkLogEntry
 {
     /**
      * @param non-empty-string                $tempoBearerToken
@@ -23,18 +23,18 @@ final class AddWorkLogEntryViaTempoV4Api implements SetWorkLogEntry
      * @param array<non-empty-string, string> $customAttributesToBeSet
      */
     public function __construct(
-        private readonly ClientInterface $httpClient,
-        private readonly RequestFactoryInterface $makeRequest,
-        private readonly string $tempoBearerToken,
-        private readonly string $authorJiraAccountId,
-        private readonly array $customAttributesToBeSet,
+        private ClientInterface $httpClient,
+        private RequestFactoryInterface $makeRequest,
+        private string $tempoBearerToken,
+        private string $authorJiraAccountId,
+        private array $customAttributesToBeSet,
     ) {
     }
 
     public function __invoke(LogEntry $logEntry): void
     {
         $request = $this->makeRequest
-            ->createRequest('POST', 'https://api.tempo.io/core/3/worklogs')
+            ->createRequest('POST', 'https://api.tempo.io/4/worklogs')
             ->withHeader('Authorization', 'Bearer ' . $this->tempoBearerToken)
             ->withHeader('Content-Type', 'application/json')
             ->withHeader('Accept', 'application/json');

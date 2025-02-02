@@ -53,7 +53,7 @@ final readonly class GetWorkLogEntriesViaTempoV4Api implements GetWorkLogEntries
             . '&limit=1000';
 
         $request = $this->makeRequest
-            ->createRequest('GET', 'https://api.tempo.io/core/3/worklogs');
+            ->createRequest('GET', 'https://api.tempo.io/4/worklogs');
 
         $request = $request
             ->withUri(
