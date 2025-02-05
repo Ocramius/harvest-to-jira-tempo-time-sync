@@ -20,7 +20,7 @@
         }
     },
     "require": {
-        "php": "~8.3.12",
+        "php": "~8.4.3",
         "ext-bcmath": "*",
         "azjezz/psl": "^3.2.0",
         "cuyz/valinor": "^1.14.2",
@@ -38,6 +38,6 @@
         "phpunit/phpunit": "^11.5.6",
         "psalm/plugin-phpunit": "^0.19.2",
         "squizlabs/php_codesniffer": "^3.11.3",
-        "vimeo/psalm": "^6.1.0"
+        "vimeo/psalm": "^6.4.0"
     }
 }
