@@ -60,7 +60,7 @@ final class LogEntry
             }
         }
 
-        $timeSplit = (int) ($entry->hours * 3600 / count($issues));
+        $timeSplit = (int) ($entry->hours * 3600.0 / (float) count($issues));
 
         $entries = array_map(
             static fn (JiraIssueId $issue, string $description): self => new LogEntry(
