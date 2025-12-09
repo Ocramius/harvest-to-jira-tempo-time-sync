@@ -4,7 +4,10 @@
     colors="true"
     xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
     cacheResult="false"
-    failOnAllIssues="true"
+    failOnDeprecation="true"
+    failOnWarning="true"
+    failOnNotice="true"
+    failOnPhpunitDeprecation="true"
     displayDetailsOnPhpunitDeprecations="true"
     displayDetailsOnTestsThatTriggerDeprecations="true"
 >
