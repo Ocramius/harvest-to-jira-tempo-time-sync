@@ -18,7 +18,7 @@ final class TimeEntryTest extends TestCase
     public function testCanHydrateFromHarvestRecord(): void
     {
         $mapper = (new MapperBuilder())
-            ->enableFlexibleCasting()
+            ->allowScalarValueCasting()
             ->allowSuperfluousKeys()
             ->mapper();
 

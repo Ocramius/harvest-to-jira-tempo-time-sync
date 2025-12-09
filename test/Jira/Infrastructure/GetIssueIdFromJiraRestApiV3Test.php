@@ -6,7 +6,7 @@ namespace TimeSyncTest\Jira\Infrastructure;
 
 use Http\Discovery\Psr17FactoryDiscovery;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
@@ -19,14 +19,14 @@ use TimeSyncTest\OpenAPI\WrapResponseCallbackInValidationCallback;
 #[CoversClass(GetIssueIdFromJiraRestApiV3::class)]
 final class GetIssueIdFromJiraRestApiV3Test extends TestCase
 {
-    private ClientInterface&MockObject $client;
+    private ClientInterface&Stub $client;
     private GetIssueIdFromJiraRestApiV3 $getIssueId;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->client     = $this->createMock(ClientInterface::class);
+        $this->client     = $this->createStub(ClientInterface::class);
         $this->getIssueId = new GetIssueIdFromJiraRestApiV3(
             $this->client,
             Psr17FactoryDiscovery::findRequestFactory(),

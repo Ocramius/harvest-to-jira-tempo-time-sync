@@ -28,10 +28,8 @@ use function substr;
 final class SendHarvestEntryToTempoTest extends TestCase
 {
     private GetIssueIdForKey&Stub $getId;
-    /** @var GetWorkLogEntries&MockObject */
-    private GetWorkLogEntries $getWorkLogEntries;
-    /** @var SetWorkLogEntry&MockObject */
-    private SetWorkLogEntry $setWorkLogEntry;
+    private GetWorkLogEntries&Stub $getWorkLogEntries;
+    private SetWorkLogEntry&MockObject $setWorkLogEntry;
     private SendHarvestEntryToTempo $sendHarvestEntryToTempo;
 
     protected function setUp(): void
@@ -39,7 +37,7 @@ final class SendHarvestEntryToTempoTest extends TestCase
         parent::setUp();
 
         $this->getId                   = $this->createStub(GetIssueIdForKey::class);
-        $this->getWorkLogEntries       = $this->createMock(GetWorkLogEntries::class);
+        $this->getWorkLogEntries       = $this->createStub(GetWorkLogEntries::class);
         $this->setWorkLogEntry         = $this->createMock(SetWorkLogEntry::class);
         $this->sendHarvestEntryToTempo = new SendHarvestEntryToTempo(
             $this->getId,
