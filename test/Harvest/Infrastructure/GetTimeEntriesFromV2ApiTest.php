@@ -37,7 +37,7 @@ final class GetTimeEntriesFromV2ApiTest extends TestCase
             Psr17FactoryDiscovery::findUriFactory(),
             Psr17FactoryDiscovery::findRequestFactory(),
             (new MapperBuilder())
-                ->enableFlexibleCasting()
+                ->allowScalarValueCasting()
                 ->allowSuperfluousKeys()
                 ->mapper(),
             'abc123',
