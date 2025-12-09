@@ -32,12 +32,12 @@
         "psr/http-factory": "^1.1.0"
     },
     "require-dev": {
-        "doctrine/coding-standard": "^13.0.1",
+        "doctrine/coding-standard": "^14.0.0",
         "league/openapi-psr7-validator": "^0.22.0",
         "php-standard-library/psalm-plugin": "^2.3.0",
         "phpunit/phpunit": "^12.5.2",
         "psalm/plugin-phpunit": "^0.19.5",
-        "squizlabs/php_codesniffer": "^3.13.5",
+        "squizlabs/php_codesniffer": "^4.0.1",
         "vimeo/psalm": "^6.13.1"
     }
 }
