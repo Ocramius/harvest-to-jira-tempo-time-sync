@@ -20,10 +20,10 @@
         }
     },
     "require": {
-        "php": "~8.3.1",
+        "php": "~8.5.3",
         "ext-bcmath": "*",
-        "azjezz/psl": "^4.2.0",
-        "cuyz/valinor": "^2.3.1",
+        "azjezz/psl": "^4.2.1",
+        "cuyz/valinor": "^2.3.2",
         "laminas/laminas-diactoros": "^3.8.0",
         "php-http/curl-client": "^2.4.0",
         "php-http/discovery": "^1.20.0",
@@ -35,9 +35,9 @@
         "doctrine/coding-standard": "^14.0.0",
         "league/openapi-psr7-validator": "^0.22.0",
         "php-standard-library/psalm-plugin": "^2.3.0",
-        "phpunit/phpunit": "^12.5.2",
+        "phpunit/phpunit": "^12.5.14",
         "psalm/plugin-phpunit": "^0.19.5",
         "squizlabs/php_codesniffer": "^4.0.1",
-        "vimeo/psalm": "^6.13.1"
+        "vimeo/psalm": "^6.15.1"
     }
 }
