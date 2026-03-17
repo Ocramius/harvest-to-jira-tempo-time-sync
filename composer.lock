@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a175dff5219fe272fa1d75cd29e6482a",
+    "content-hash": "126662c416a4e41ef4799eac8fbbf669",
     "packages": [
         {
             "name": "azjezz/psl",
@@ -3301,16 +3301,16 @@
         },
         {
             "name": "php-standard-library/psalm-plugin",
-            "version": "2.3.0",
+            "version": "2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-standard-library/psalm-plugin.git",
-                "reference": "bf6d560ae498966150bc66a42e02744b0ee242c5"
+                "reference": "7c120dc5224ca25acbd8c8e6be56577cad7f53f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-standard-library/psalm-plugin/zipball/bf6d560ae498966150bc66a42e02744b0ee242c5",
-                "reference": "bf6d560ae498966150bc66a42e02744b0ee242c5",
+                "url": "https://api.github.com/repos/php-standard-library/psalm-plugin/zipball/7c120dc5224ca25acbd8c8e6be56577cad7f53f0",
+                "reference": "7c120dc5224ca25acbd8c8e6be56577cad7f53f0",
                 "shasum": ""
             },
             "require": {
@@ -3349,9 +3349,9 @@
             "description": "Psalm plugin for the PHP Standard Library",
             "support": {
                 "issues": "https://github.com/php-standard-library/psalm-plugin/issues",
-                "source": "https://github.com/php-standard-library/psalm-plugin/tree/2.3.0"
+                "source": "https://github.com/php-standard-library/psalm-plugin/tree/2.4.0"
             },
-            "time": "2023-11-28T12:22:48+00:00"
+            "time": "2026-03-16T18:44:56+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -6669,16 +6669,16 @@
         },
         {
             "name": "vimeo/psalm",
-            "version": "6.15.1",
+            "version": "6.16.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vimeo/psalm.git",
-                "reference": "28dc127af1b5aecd52314f6f645bafc10d0e11f9"
+                "reference": "7cf3e8b988edd75e0766963b0b9e671b220f5785"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vimeo/psalm/zipball/28dc127af1b5aecd52314f6f645bafc10d0e11f9",
-                "reference": "28dc127af1b5aecd52314f6f645bafc10d0e11f9",
+                "url": "https://api.github.com/repos/vimeo/psalm/zipball/7cf3e8b988edd75e0766963b0b9e671b220f5785",
+                "reference": "7cf3e8b988edd75e0766963b0b9e671b220f5785",
                 "shasum": ""
             },
             "require": {
@@ -6783,7 +6783,7 @@
                 "issues": "https://github.com/vimeo/psalm/issues",
                 "source": "https://github.com/vimeo/psalm"
             },
-            "time": "2026-02-07T19:27:16+00:00"
+            "time": "2026-03-17T11:15:56+00:00"
         },
         {
             "name": "webmozart/assert",
@@ -6850,7 +6850,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "~8.3.1",
+        "php": "~8.5.4",
         "ext-bcmath": "*"
     },
     "platform-dev": {},
